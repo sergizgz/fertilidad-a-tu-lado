@@ -1,17 +1,58 @@
-# React + Vite
+# Fertilidad a Tu Lado
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sitio web para **Lidia**: asesoría en fertilidad y reproducción asistida. Stack moderno, diseño cálido alineado con la identidad del proyecto (paleta rosa / crema del logo).
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** + **Vite 8**
+- **React Router** (páginas legales y home)
+- **Tailwind CSS** (paleta extendida en `tailwind.config.js`)
+- **Lucide React** (iconos)
+- Fuentes: **Inter** + **Lora** (Google Fonts)
 
-## React Compiler
+## Estructura principal
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```
+src/
+├── App.jsx              # Rutas
+├── components/          # Header, Footer
+├── pages/               # Home, Aviso legal, Privacidad, Cookies
+└── sections/            # Hero, About, Services, HowItWorks, Testimonials, Contact
+```
 
-## Expanding the ESLint configuration
+## Qué incluye el proyecto
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# fertilidad-a-tu-lado
+- **Hero** a pantalla completa: imagen de fondo (Unsplash, pareja / embarazo, tono cálido), velos con **tinte rosa de marca** (`rose-dark`, `rose-accent`, `rose-soft`), titular centrado y espaciado para header fijo y móvil.
+- **Eslogan** en tres líneas: *Entiende tu ciclo* / *Acompaña tu proceso* / *Con respuestas, no silencios*, con CTA *Quiero hablar contigo* y *Conóceme* (scroll a “Sobre mí”).
+- **Sobre mí**, **Servicios**, **Cómo funciona**, **Testimonios**, **Contacto** con formulario (mensaje de éxito) y tarjetas lateral (Instagram con etiqueta correcta, email).
+- **Footer** con enlaces y contacto; **Header** fijo con navegación ancla.
+- **Páginas legales** (aviso legal, privacidad, cookies) con placeholders para datos reales.
+- **Paleta unificada**: `cream`, `rose-soft`, `rose-accent`, `rose-dark`, etc., coherente entre hero y resto de secciones.
+- **Contact / Instagram**: uso del icono `AtSign` de Lucide (la versión de `lucide-react` del proyecto no exporta `Instagram`); texto “Instagram” como etiqueta. Tras cambios de imports, conviene borrar caché de Vite (`node_modules/.vite`) si el dev server muestra errores antiguos.
+
+## Imágenes
+
+- **Hero**: foto apaisada desde [Unsplash](https://unsplash.com) (crédito a la autora en la ficha de la foto; enlazar atribución en producción según licencia Unsplash).
+- **Sobre mí**: puede haber un **placeholder** de desarrollo sustituible por foto real antes de producción.
+
+## Scripts
+
+```bash
+npm install
+npm run dev      # desarrollo — http://localhost:5173
+npm run build    # producción → dist/
+npm run preview  # vista previa del build
+npm run lint
+```
+
+## Repositorio y despliegue
+
+- Código en **GitHub**; despliegue recomendable con **Vercel** (u otro) conectado al mismo repositorio y rama de producción (p. ej. `main`), para que cada `git push` dispare un nuevo deploy.
+
+## Notas legales de contenido
+
+Sustituir en las páginas legales y de contacto los marcadores `[apellidos]`, `[NIF]`, etc., cuando haya datos definitivos.
+
+---
+
+Proyecto generado inicialmente con la plantilla Vite + React y evolucionado para el sitio de Fertilidad a Tu Lado.
