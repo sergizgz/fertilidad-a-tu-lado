@@ -1,7 +1,11 @@
 import { useEffect } from 'react'
 
 export default function AvisoLegal() {
-  useEffect(() => window.scrollTo(0, 0), [])
+  useEffect(() => {
+    document.title = 'Aviso Legal — Fertilidad a Tu Lado'
+    window.scrollTo(0, 0)
+    return () => { document.title = 'Fertilidad a Tu Lado' }
+  }, [])
   return (
     <div className="max-w-3xl mx-auto px-5 py-32">
       <h1 className="font-serif text-4xl text-[#2A2A2A] mb-8">Aviso Legal</h1>
