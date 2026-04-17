@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import * as XLSX from 'xlsx'
 import {
   LogIn, LogOut, LayoutDashboard, Mail, ChevronDown, ChevronUp,
   TrendingUp, Users, Calendar, Tag, MessageSquare, Search,
-  Download, ExternalLink, Menu, X
+  Download, ExternalLink, Menu, X, StickyNote, CheckCircle2,
+  Clock, PhoneCall, XCircle
 } from 'lucide-react'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -23,6 +25,13 @@ const SERVICE_COLORS = {
   otro: 'bg-slate-100 text-slate-600',
 }
 
+const STATUS_CONFIG = {
+  pendiente:    { label: 'Pendiente',    color: 'bg-amber-100 text-amber-700',  icon: Clock },
+  en_contacto:  { label: 'En contacto', color: 'bg-blue-100 text-blue-700',    icon: PhoneCall },
+  atendido:     { label: 'Atendida',    color: 'bg-green-100 text-green-700',  icon: CheckCircle2 },
+  descartado:   { label: 'Descartada',  color: 'bg-slate-100 text-slate-500',  icon: XCircle },
+}
+
 function fmt(iso) {
   return new Date(iso).toLocaleDateString('es-ES', {
     day: '2-digit', month: 'short', year: 'numeric',
@@ -36,19 +45,25 @@ function fmtShort(iso) {
   })
 }
 
-function exportCSV(data) {
-  const headers = ['Fecha', 'Nombre', 'Email', 'Servicio', 'Mensaje']
-  const rows = data.map(s => [
-    fmt(s.created_at), s.name, s.email,
-    SERVICE_LABELS[s.service] ?? s.service ?? '—',
-    `"${s.message.replace(/"/g, '""')}"`,
-  ])
-  const csv = [headers, ...rows].map(r => r.join(';')).join('\n')
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a'); a.href = url
-  a.download = `consultas_${new Date().toISOString().slice(0, 10)}.csv`
-  a.click(); URL.revokeObjectURL(url)
+function exportXLSX(data) {
+  const rows = data.map(s => ({
+    'Fecha':    fmt(s.created_at),
+    'Nombre':   s.name,
+    'Email':    s.email,
+    'Servicio': SERVICE_LABELS[s.service] ?? s.service ?? '—',
+    'Estado':   STATUS_CONFIG[s.status]?.label ?? s.status ?? 'Pendiente',
+    'Mensaje':  s.message,
+    'Notas':    s.notes ?? '',
+  }))
+  const ws = XLSX.utils.json_to_sheet(rows)
+  // Anchos de columna
+  ws['!cols'] = [
+    { wch: 20 }, { wch: 22 }, { wch: 30 },
+    { wch: 20 }, { wch: 14 }, { wch: 50 }, { wch: 40 },
+  ]
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Solicitudes')
+  XLSX.writeFile(wb, `consultas_${new Date().toISOString().slice(0, 10)}.xlsx`)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -204,12 +219,15 @@ function StatsSection({ submissions }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Sección: Solicitudes (tabla)
 // ─────────────────────────────────────────────────────────────────────────────
-function SubmissionsSection({ submissions }) {
-  const [search, setSearch] = useState('')
-  const [sortField, setSortField] = useState('created_at')
-  const [sortDir, setSortDir] = useState('desc')
-  const [expanded, setExpanded] = useState(null)
+function SubmissionsSection({ submissions, onUpdate, token }) {
+  const [search, setSearch]           = useState('')
+  const [sortField, setSortField]     = useState('created_at')
+  const [sortDir, setSortDir]         = useState('desc')
+  const [expanded, setExpanded]       = useState(null)
   const [serviceFilter, setServiceFilter] = useState('')
+  const [statusFilter, setStatusFilter]   = useState('')
+  const [savingId, setSavingId]       = useState(null)
+  const [notesDraft, setNotesDraft]   = useState({}) // { [id]: string }
 
   const toggleSort = (field) => {
     if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
@@ -219,6 +237,7 @@ function SubmissionsSection({ submissions }) {
   const filtered = submissions
     .filter(s =>
       (!serviceFilter || s.service === serviceFilter) &&
+      (!statusFilter  || s.status  === statusFilter)  &&
       (s.name.toLowerCase().includes(search.toLowerCase()) ||
        s.email.toLowerCase().includes(search.toLowerCase()) ||
        s.message.toLowerCase().includes(search.toLowerCase()))
@@ -235,15 +254,39 @@ function SubmissionsSection({ submissions }) {
       : <ChevronDown size={13} className="text-rose-accent" />
   }
 
+  const handleStatusChange = async (id, status) => {
+    setSavingId(id)
+    const res = await fetch('/api/update-submission', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id, status }),
+    })
+    const { submission } = await res.json()
+    if (submission) onUpdate(submission)
+    setSavingId(null)
+  }
+
+  const handleNotesSave = async (id) => {
+    setSavingId(id)
+    const res = await fetch('/api/update-submission', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id, notes: notesDraft[id] ?? '' }),
+    })
+    const { submission } = await res.json()
+    if (submission) onUpdate(submission)
+    setSavingId(null)
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <h2 className="font-serif text-xl text-[#2A2A2A]">Solicitudes de información
           <span className="ml-2 text-sm font-sans font-normal text-[#9B9B9B]">({filtered.length})</span>
         </h2>
-        <button onClick={() => exportCSV(filtered)}
+        <button onClick={() => exportXLSX(filtered)}
           className="inline-flex items-center gap-2 text-sm text-rose-accent hover:text-rose-dark border border-rose-soft rounded-full px-4 py-2 transition-colors">
-          <Download size={14} /> Exportar CSV
+          <Download size={14} /> Exportar Excel
         </button>
       </div>
 
@@ -262,6 +305,13 @@ function SubmissionsSection({ submissions }) {
             <option key={val} value={val}>{label}</option>
           ))}
         </select>
+        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
+          className="border border-cream-darker rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-rose-accent bg-white text-[#4A4A4A]">
+          <option value="">Todos los estados</option>
+          {Object.entries(STATUS_CONFIG).map(([val, { label }]) => (
+            <option key={val} value={val}>{label}</option>
+          ))}
+        </select>
       </div>
 
       {/* Tabla */}
@@ -276,11 +326,12 @@ function SubmissionsSection({ submissions }) {
               <thead>
                 <tr className="border-b border-cream-dark bg-cream/50">
                   {[
-                    { label: 'Fecha', field: 'created_at' },
-                    { label: 'Nombre', field: 'name' },
-                    { label: 'Email', field: 'email' },
+                    { label: 'Fecha',    field: 'created_at' },
+                    { label: 'Nombre',   field: 'name' },
+                    { label: 'Email',    field: 'email' },
                     { label: 'Servicio', field: 'service' },
-                    { label: 'Mensaje', field: null },
+                    { label: 'Estado',   field: 'status' },
+                    { label: 'Mensaje',  field: null },
                   ].map(({ label, field }) => (
                     <th key={label}
                       onClick={() => field && toggleSort(field)}
@@ -294,45 +345,97 @@ function SubmissionsSection({ submissions }) {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(s => (
-                  <>
-                    <tr key={s.id}
-                      className="border-b border-cream-dark/50 hover:bg-cream/40 transition-colors cursor-pointer"
-                      onClick={() => setExpanded(expanded === s.id ? null : s.id)}>
-                      <td className="px-4 py-3 text-[#9B9B9B] whitespace-nowrap">{fmtShort(s.created_at)}</td>
-                      <td className="px-4 py-3 font-medium text-[#2A2A2A] whitespace-nowrap">{s.name}</td>
-                      <td className="px-4 py-3 text-[#4A4A4A] whitespace-nowrap">{s.email}</td>
-                      <td className="px-4 py-3">
-                        {s.service ? (
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${SERVICE_COLORS[s.service] ?? 'bg-slate-100 text-slate-600'}`}>
-                            {SERVICE_LABELS[s.service] ?? s.service}
-                          </span>
-                        ) : <span className="text-[#C0C0C0]">—</span>}
-                      </td>
-                      <td className="px-4 py-3 text-[#6B6B6B] max-w-xs">
-                        <span className={expanded === s.id ? '' : 'line-clamp-1'}>{s.message}</span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <a href={`mailto:${s.email}?subject=Re: Tu consulta en Fertilidad a Tu Lado`}
-                          onClick={e => e.stopPropagation()}
-                          className="inline-flex items-center gap-1 text-xs text-rose-accent hover:text-rose-dark font-medium">
-                          <ExternalLink size={12} /> Responder
-                        </a>
-                      </td>
-                    </tr>
-                    {expanded === s.id && (
-                      <tr key={`${s.id}-exp`} className="bg-cream/30">
-                        <td colSpan={6} className="px-4 py-3">
-                          <div className="flex items-start gap-2 text-sm text-[#4A4A4A] leading-relaxed bg-white rounded-xl px-4 py-3 border border-cream-darker/30">
-                            <MessageSquare size={14} className="text-rose-accent shrink-0 mt-0.5" />
-                            <p>{s.message}</p>
+                {filtered.map(s => {
+                  const statusCfg = STATUS_CONFIG[s.status] ?? STATUS_CONFIG.pendiente
+                  const StatusIcon = statusCfg.icon
+                  const isExpanded = expanded === s.id
+                  const notesVal = notesDraft[s.id] !== undefined ? notesDraft[s.id] : (s.notes ?? '')
+
+                  return (
+                    <>
+                      <tr key={s.id}
+                        className="border-b border-cream-dark/50 hover:bg-cream/30 transition-colors cursor-pointer"
+                        onClick={() => setExpanded(isExpanded ? null : s.id)}>
+                        <td className="px-4 py-3 text-[#9B9B9B] whitespace-nowrap">{fmtShort(s.created_at)}</td>
+                        <td className="px-4 py-3 font-medium text-[#2A2A2A] whitespace-nowrap">{s.name}</td>
+                        <td className="px-4 py-3 text-[#4A4A4A] whitespace-nowrap">{s.email}</td>
+                        <td className="px-4 py-3">
+                          {s.service
+                            ? <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${SERVICE_COLORS[s.service] ?? 'bg-slate-100 text-slate-600'}`}>
+                                {SERVICE_LABELS[s.service] ?? s.service}
+                              </span>
+                            : <span className="text-[#C0C0C0]">—</span>}
+                        </td>
+                        <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
+                          <select
+                            value={s.status ?? 'pendiente'}
+                            disabled={savingId === s.id}
+                            onChange={e => handleStatusChange(s.id, e.target.value)}
+                            className={`text-xs font-medium px-2.5 py-1 rounded-full border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-accent/30 disabled:opacity-50 ${statusCfg.color}`}>
+                            {Object.entries(STATUS_CONFIG).map(([val, { label }]) => (
+                              <option key={val} value={val}>{label}</option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="px-4 py-3 text-[#6B6B6B] max-w-xs">
+                          <div className="flex items-center gap-1.5">
+                            <span className="line-clamp-1">{s.message}</span>
+                            {s.notes && <StickyNote size={12} className="text-amber-400 shrink-0" title="Tiene notas" />}
                           </div>
-                          <p className="text-xs text-[#9B9B9B] mt-1.5 pl-1">{fmt(s.created_at)}</p>
+                        </td>
+                        <td className="px-4 py-3">
+                          <a href={`mailto:${s.email}?subject=Re: Tu consulta en Fertilidad a Tu Lado`}
+                            onClick={e => e.stopPropagation()}
+                            className="inline-flex items-center gap-1 text-xs text-rose-accent hover:text-rose-dark font-medium whitespace-nowrap">
+                            <ExternalLink size={12} /> Responder
+                          </a>
                         </td>
                       </tr>
-                    )}
-                  </>
-                ))}
+
+                      {/* Fila expandida */}
+                      {isExpanded && (
+                        <tr key={`${s.id}-exp`} className="bg-cream/20">
+                          <td colSpan={7} className="px-5 py-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {/* Mensaje */}
+                              <div>
+                                <p className="text-xs font-medium text-[#6B6B6B] mb-2 flex items-center gap-1.5">
+                                  <MessageSquare size={12} className="text-rose-accent" /> Mensaje
+                                </p>
+                                <div className="bg-white rounded-xl px-4 py-3 border border-cream-darker/30 text-sm text-[#4A4A4A] leading-relaxed">
+                                  {s.message}
+                                </div>
+                                <p className="text-xs text-[#9B9B9B] mt-1.5">{fmt(s.created_at)}</p>
+                              </div>
+
+                              {/* Notas */}
+                              <div>
+                                <p className="text-xs font-medium text-[#6B6B6B] mb-2 flex items-center gap-1.5">
+                                  <StickyNote size={12} className="text-amber-500" /> Notas internas
+                                </p>
+                                <textarea
+                                  rows={4}
+                                  placeholder="Añade tus notas sobre esta consulta..."
+                                  value={notesVal}
+                                  onChange={e => setNotesDraft(d => ({ ...d, [s.id]: e.target.value }))}
+                                  className="w-full border border-cream-darker rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-accent bg-white resize-none transition-colors"
+                                />
+                                <div className="flex justify-end mt-2">
+                                  <button
+                                    disabled={savingId === s.id}
+                                    onClick={() => handleNotesSave(s.id)}
+                                    className="inline-flex items-center gap-1.5 bg-rose-accent hover:bg-rose-dark text-white text-xs font-medium px-4 py-1.5 rounded-full transition-colors disabled:opacity-50">
+                                    {savingId === s.id ? 'Guardando...' : 'Guardar nota'}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  )
+                })}
               </tbody>
             </table>
           </div>
@@ -365,6 +468,10 @@ function Dashboard({ session, onLogout }) {
       .then(({ submissions }) => setSubmissions(submissions ?? []))
       .finally(() => setLoading(false))
   }, [session])
+
+  const handleUpdate = useCallback((updated) => {
+    setSubmissions(prev => prev.map(s => s.id === updated.id ? updated : s))
+  }, [])
 
   const NavItem = ({ item }) => (
     <button
@@ -440,7 +547,13 @@ function Dashboard({ session, onLogout }) {
           ) : (
             <>
               {activeSection === 'stats' && <StatsSection submissions={submissions} />}
-              {activeSection === 'submissions' && <SubmissionsSection submissions={submissions} />}
+              {activeSection === 'submissions' && (
+                <SubmissionsSection
+                  submissions={submissions}
+                  onUpdate={handleUpdate}
+                  token={session.access_token}
+                />
+              )}
             </>
           )}
         </main>
