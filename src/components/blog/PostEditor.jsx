@@ -1,6 +1,179 @@
 import { useState, useEffect, useRef } from 'react'
 import TiptapEditor from '../TiptapEditor'
-import { ArrowLeft, Eye, EyeOff, Upload, X, Loader2 } from 'lucide-react'
+import { ArrowLeft, Eye, EyeOff, Upload, X, Loader2, Sparkles, Copy, Check } from 'lucide-react'
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Modal generador de prompt para IA
+// ─────────────────────────────────────────────────────────────────────────────
+const TONOS = [
+  { value: 'cercano',       label: 'Cercano y empático',      desc: 'Como una amiga experta que te explica las cosas con calma' },
+  { value: 'profesional',   label: 'Profesional y claro',     desc: 'Riguroso, con datos, sin tecnicismos innecesarios' },
+  { value: 'divulgativo',   label: 'Divulgativo',             desc: 'Educativo y accesible, ideal para quien no sabe nada del tema' },
+  { value: 'motivador',     label: 'Motivador y esperanzador', desc: 'Para acompañar emocionalmente en momentos difíciles' },
+]
+
+function generarPrompt({ tema, ideas, tono }) {
+  const tonoObj = TONOS.find(t => t.value === tono) ?? TONOS[0]
+  return `Eres el asistente de escritura de Lidia, enfermera especialista en reproducción asistida con más de 15 años de experiencia acompañando a parejas y mujeres en su camino hacia la maternidad. Lidia tiene una web llamada "Fertilidad a Tu Lado" donde publica artículos de blog para informar, acompañar y orientar a sus lectoras.
+
+SOBRE EL ARTÍCULO:
+- Tema: ${tema}
+- Ideas o puntos que Lidia quiere incluir: ${ideas || 'Ninguna indicación específica, desarrolla el tema con libertad'}
+- Tono deseado: ${tonoObj.label} — ${tonoObj.desc}
+
+INSTRUCCIONES DE ESCRITURA:
+- Escribe en primera persona del plural o dirigiéndote directamente a la lectora (tú)
+- Usa un lenguaje accesible, sin jerga médica excesiva; cuando uses términos técnicos, explícalos
+- El artículo debe tener entre 500 y 900 palabras
+- Incluye una introducción que enganche, secciones con título y un cierre con llamada a la acción suave
+- No uses frases vacías ni relleno; cada párrafo debe aportar valor real
+
+FORMATO DE SALIDA (MUY IMPORTANTE):
+Devuelve el artículo en formato Markdown con esta estructura exacta:
+- Los títulos de sección con ## (por ejemplo: ## Por qué es importante)
+- Subtítulos con ### si los hubiera
+- Texto en **negrita** para destacar conceptos clave
+- Listas con - al inicio de cada ítem
+- Citas o frases destacadas con > al inicio
+- Párrafos separados por una línea en blanco
+- NO incluyas el título principal del artículo en el cuerpo (solo las secciones)
+
+Empieza directamente con el contenido del artículo, sin preámbulos ni explicaciones previas.`
+}
+
+function ModalGeneradorIA({ onClose }) {
+  const [tema, setTema]     = useState('')
+  const [ideas, setIdeas]   = useState('')
+  const [tono, setTono]     = useState('cercano')
+  const [prompt, setPrompt] = useState('')
+  const [copiado, setCopiado] = useState(false)
+
+  const handleGenerar = () => {
+    if (!tema.trim()) return
+    setPrompt(generarPrompt({ tema, ideas, tono }))
+  }
+
+  const handleCopiar = async () => {
+    await navigator.clipboard.writeText(prompt)
+    setCopiado(true)
+    setTimeout(() => setCopiado(false), 2000)
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+      {/* Fondo */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+
+      {/* Panel */}
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        {/* Cabecera */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-cream-darker/30">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-rose-soft flex items-center justify-center">
+              <Sparkles size={16} className="text-rose-accent" />
+            </div>
+            <div>
+              <h3 className="font-medium text-[#2A2A2A] text-sm">Generar con IA</h3>
+              <p className="text-xs text-[#9B9B9B]">Crea el prompt y pégalo en ChatGPT, Claude o la IA que prefieras</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-cream-dark text-[#9B9B9B] transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="px-6 py-5 space-y-5">
+          {/* Tema */}
+          <div>
+            <label className="block text-sm font-medium text-[#2A2A2A] mb-1.5">
+              ¿De qué quieres escribir? <span className="text-rose-accent">*</span>
+            </label>
+            <input
+              type="text"
+              value={tema}
+              onChange={e => setTema(e.target.value)}
+              placeholder="Ej: Qué es la reserva ovárica y cómo se evalúa"
+              className="w-full border border-cream-darker rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-accent bg-cream/50 transition-colors"
+            />
+          </div>
+
+          {/* Ideas propias */}
+          <div>
+            <label className="block text-sm font-medium text-[#2A2A2A] mb-1.5">
+              Ideas o puntos que quieres incluir
+              <span className="text-[#9B9B9B] font-normal ml-1">(opcional)</span>
+            </label>
+            <textarea
+              rows={3}
+              value={ideas}
+              onChange={e => setIdeas(e.target.value)}
+              placeholder="Ej: Mencionar que la AMH no es un diagnóstico definitivo, que hay que explicar qué es la punción ovárica, añadir que la edad es el factor más importante..."
+              className="w-full border border-cream-darker rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-accent bg-cream/50 resize-none transition-colors"
+            />
+          </div>
+
+          {/* Tono */}
+          <div>
+            <label className="block text-sm font-medium text-[#2A2A2A] mb-2">Tono del artículo</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {TONOS.map(t => (
+                <button
+                  key={t.value}
+                  type="button"
+                  onClick={() => setTono(t.value)}
+                  className={`text-left px-4 py-3 rounded-xl border transition-all ${
+                    tono === t.value
+                      ? 'border-rose-accent bg-rose-soft/20 text-rose-dark'
+                      : 'border-cream-darker bg-white text-[#4A4A4A] hover:border-rose-soft'
+                  }`}
+                >
+                  <p className="text-sm font-medium">{t.label}</p>
+                  <p className="text-xs text-[#9B9B9B] mt-0.5">{t.desc}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Botón generar */}
+          <button
+            type="button"
+            onClick={handleGenerar}
+            disabled={!tema.trim()}
+            className="w-full inline-flex items-center justify-center gap-2 bg-rose-accent hover:bg-rose-dark text-white font-medium py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Sparkles size={15} /> Generar prompt
+          </button>
+
+          {/* Resultado */}
+          {prompt && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-[#2A2A2A]">Prompt listo — cópialo y pégalo en tu IA</p>
+                <button
+                  type="button"
+                  onClick={handleCopiar}
+                  className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-all ${
+                    copiado
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-rose-soft/40 text-rose-dark hover:bg-rose-soft'
+                  }`}
+                >
+                  {copiado ? <><Check size={12} /> Copiado</> : <><Copy size={12} /> Copiar</>}
+                </button>
+              </div>
+              <pre className="bg-cream/80 border border-cream-darker rounded-xl p-4 text-xs text-[#4A4A4A] leading-relaxed whitespace-pre-wrap font-sans max-h-64 overflow-y-auto">
+                {prompt}
+              </pre>
+              <p className="text-xs text-[#9B9B9B]">
+                💡 Copia el prompt, pégalo en ChatGPT o Claude, y cuando te devuelva el artículo pégalo directamente en el editor — el formato se aplicará automáticamente.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function slugify(text) {
   return text
@@ -29,6 +202,7 @@ export default function PostEditor({ post, token, onSave, onCancel }) {
   const [saving, setSaving] = useState(false)
   const [uploadingCover, setUploadingCover] = useState(false)
   const [error, setError] = useState(null)
+  const [modalIA, setModalIA] = useState(false)
 
   // Auto-generar slug desde título si no fue tocado manualmente
   useEffect(() => {
@@ -97,9 +271,12 @@ export default function PostEditor({ post, token, onSave, onCancel }) {
   }
 
   return (
+    <>
+    {modalIA && <ModalGeneradorIA onClose={() => setModalIA(false)} />}
+
     <div className="space-y-6">
       {/* Cabecera */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
         <button type="button" onClick={onCancel}
           className="p-2 rounded-xl hover:bg-cream-dark text-[#9B9B9B] hover:text-[#2A2A2A] transition-colors">
           <ArrowLeft size={18} />
@@ -108,6 +285,11 @@ export default function PostEditor({ post, token, onSave, onCancel }) {
           {isEditing ? 'Editar entrada' : 'Nueva entrada'}
         </h2>
         <div className="ml-auto flex items-center gap-3">
+          {/* Botón IA */}
+          <button type="button" onClick={() => setModalIA(true)}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-rose-accent border border-rose-soft hover:bg-rose-soft/20 px-4 py-2 rounded-full transition-colors">
+            <Sparkles size={14} /> Generar con IA
+          </button>
           {/* Toggle publicado */}
           <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-[#6B6B6B]">
             {form.published
@@ -233,5 +415,6 @@ export default function PostEditor({ post, token, onSave, onCancel }) {
         </div>
       </form>
     </div>
+    </>
   )
 }
