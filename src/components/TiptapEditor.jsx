@@ -6,6 +6,12 @@ import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
 import { useEffect, useRef, useCallback } from 'react'
+import { marked } from 'marked'
+
+// Detecta si el texto pegado tiene sintaxis markdown
+function looksLikeMarkdown(text) {
+  return /^#{1,6}\s|^\*\*|^\*[^*]|^-\s|^\d+\.\s|^>\s/.test(text)
+}
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough,
   List, ListOrdered, Quote, Link as LinkIcon, Image as ImageIcon,
@@ -55,6 +61,24 @@ export default function TiptapEditor({ value, onChange, token, placeholder = 'Es
       attributes: { class: 'focus:outline-none' },
     },
   })
+
+  // Interceptar pegado de markdown y convertirlo a HTML
+  useEffect(() => {
+    if (!editor) return
+    const dom = editor.view.dom
+    const handlePaste = (e) => {
+      const text = e.clipboardData?.getData('text/plain') ?? ''
+      if (!looksLikeMarkdown(text)) return
+      e.preventDefault()
+      e.stopPropagation()
+      const html = marked.parse(text, { breaks: false })
+      editor.chain().focus().insertContent(html, {
+        parseOptions: { preserveWhitespace: false },
+      }).run()
+    }
+    dom.addEventListener('paste', handlePaste)
+    return () => dom.removeEventListener('paste', handlePaste)
+  }, [editor])
 
   // Sincronizar valor externo cuando cambia el post seleccionado
   useEffect(() => {
