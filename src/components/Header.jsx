@@ -58,7 +58,7 @@ export default function Header() {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <LogoIcon size={52} className="text-rose-accent transition-colors duration-300" />
+          <LogoIcon size={120} className="text-rose-accent transition-colors duration-300" />
           <span className="font-serif font-medium text-lg leading-tight text-[#2A2A2A]">
             Fertilidad
             <span className="text-rose-accent"> a Tu Lado</span>
