@@ -57,7 +57,7 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-5 flex items-center justify-between h-16 md:h-20">
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group">
+        <Link to="/" className="flex items-center gap-0 group">
           <LogoIcon size={120} className="text-rose-accent transition-colors duration-300" />
           <span className="font-serif font-medium text-lg leading-tight text-[#2A2A2A]">
             Fertilidad
