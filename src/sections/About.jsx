@@ -16,7 +16,7 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
           {/* Imagen: placeholder de desarrollo (sustituir en prod) */}
           <div className="relative">
-            <div className="aspect-square rounded-3xl overflow-hidden shadow-lg">
+            <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-lg">
               <img
                 src={LIDIA_PHOTO_PLACEHOLDER}
                 alt="Placeholder de retrato (sustituir por foto de Lidia en producción)"
