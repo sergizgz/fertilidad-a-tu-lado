@@ -88,6 +88,13 @@ export default function Header() {
             )
           ))}
           <a
+            href="/#guia-gratuita"
+            onClick={e => handleNavClick(e, '/#guia-gratuita')}
+            className="text-sm font-medium px-4 py-2 rounded-full border border-rose-accent text-rose-accent hover:bg-rose-soft/30 transition-all duration-200 active:scale-95 flex items-center gap-1.5"
+          >
+            🎁 Guía gratis
+          </a>
+          <a
             href="/#contacto"
             onClick={e => handleNavClick(e, '/#contacto')}
             className="text-sm font-medium px-5 py-2.5 rounded-full bg-rose-accent text-white hover:bg-rose-dark transition-all duration-200 active:scale-95"

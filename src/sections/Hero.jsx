@@ -70,6 +70,17 @@ export default function Hero() {
               Conóceme
             </button>
           </div>
+
+          {/* Teaser guía gratuita */}
+          <button
+            onClick={() => document.getElementById('guia-gratuita')?.scrollIntoView({ behavior: 'smooth' })}
+            className="inline-flex items-center gap-2 mt-2 transition-opacity duration-200 hover:opacity-80 active:scale-95"
+          >
+            <span className="text-xl">🎁</span>
+            <span className="text-white/75 text-sm underline underline-offset-2 decoration-white/40">
+              ¿Primera vez aquí? Descarga mi guía gratuita sobre fertilidad
+            </span>
+          </button>
         </div>
       </div>
     </section>
