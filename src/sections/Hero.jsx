@@ -5,8 +5,10 @@ const HERO_IMAGE_FALLBACK =
   'https://images.unsplash.com/photo-1763106377335-578cf40ce82e?w=1920&h=820&q=85&auto=format&fit=crop'
 
 export default function Hero() {
-  const { settings } = useSiteSettings()
-  const heroImage  = settings.hero_image_url || HERO_IMAGE_FALLBACK
+  const { settings, loading } = useSiteSettings()
+
+  // Mientras carga no usamos ninguna imagen → evita el flash de la fallback
+  const heroImage  = loading ? null : (settings.hero_image_url || HERO_IMAGE_FALLBACK)
   const darkness   = (parseInt(settings.hero_darkness  ?? '45') / 100).toFixed(2)
   const rose       = (parseInt(settings.hero_rose      ?? '35') / 100).toFixed(2)
   const posX       = settings.hero_pos_x ?? '56'
@@ -20,7 +22,9 @@ export default function Hero() {
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{
-        backgroundImage: `url(${heroImage}), linear-gradient(135deg, #A55A6E 0%, #C9788A 38%, #E09AAA 72%, #F2C8D0 100%)`,
+        backgroundImage: heroImage
+          ? `url(${heroImage}), linear-gradient(135deg, #A55A6E 0%, #C9788A 38%, #E09AAA 72%, #F2C8D0 100%)`
+          : `linear-gradient(135deg, #A55A6E 0%, #C9788A 38%, #E09AAA 72%, #F2C8D0 100%)`,
         backgroundSize: 'cover',
         backgroundPosition: `${posX}% ${posY}%`,
         backgroundBlendMode: 'normal',
