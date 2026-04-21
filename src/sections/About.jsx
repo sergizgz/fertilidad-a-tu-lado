@@ -20,7 +20,7 @@ export default function About() {
               <img
                 src={LIDIA_PHOTO_PLACEHOLDER}
                 alt="Placeholder de retrato (sustituir por foto de Lidia en producción)"
-                className="w-full h-full object-cover object-top"
+                className="w-full h-full object-cover object-[center_20%]"
               />
             </div>
             {/* Floating badge */}
