@@ -67,9 +67,9 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="mailto:hola@fertilidadatulado.es" className="flex items-center gap-2 hover:text-rose-soft transition-colors">
+                <a href="mailto:hola@fertilidadatulado.com" className="flex items-center gap-2 hover:text-rose-soft transition-colors">
                   <Mail size={16} />
-                  hola@fertilidadatulado.es
+                  hola@fertilidadatulado.com
                 </a>
               </li>
             </ul>

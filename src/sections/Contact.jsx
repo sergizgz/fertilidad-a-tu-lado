@@ -151,7 +151,7 @@ export default function Contact() {
             </a>
 
             <a
-              href="mailto:hola@fertilidadatulado.es"
+              href="mailto:hola@fertilidadatulado.com"
               className="bg-white rounded-2xl p-6 border border-cream-darker/30 flex items-center gap-4 hover:border-rose-accent transition-colors group"
             >
               <div className="w-10 h-10 rounded-xl bg-rose-soft flex items-center justify-center">
@@ -159,7 +159,7 @@ export default function Contact() {
               </div>
               <div>
                 <p className="font-medium text-[#2A2A2A] text-sm group-hover:text-rose-accent transition-colors">Email</p>
-                <p className="text-[#9B9B9B] text-xs">hola@fertilidadatulado.es</p>
+                <p className="text-[#9B9B9B] text-xs">hola@fertilidadatulado.com</p>
               </div>
             </a>
 

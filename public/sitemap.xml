@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fertilidadatulado.es/</loc>
+    <loc>https://fertilidadatulado.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://fertilidadatulado.es/blog</loc>
+    <loc>https://fertilidadatulado.com/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://fertilidadatulado.es/aviso-legal</loc>
+    <loc>https://fertilidadatulado.com/aviso-legal</loc>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
-    <loc>https://fertilidadatulado.es/privacidad</loc>
+    <loc>https://fertilidadatulado.com/privacidad</loc>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
-    <loc>https://fertilidadatulado.es/cookies</loc>
+    <loc>https://fertilidadatulado.com/cookies</loc>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>

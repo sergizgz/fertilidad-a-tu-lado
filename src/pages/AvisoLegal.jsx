@@ -14,8 +14,8 @@ export default function AvisoLegal() {
       <div className="prose prose-slate max-w-none space-y-6 text-[#6B6B6B] leading-relaxed text-sm">
         <p><strong className="text-[#2A2A2A]">Titular:</strong> Lidia [apellidos] · NIF: [NIF]</p>
         <p><strong className="text-[#2A2A2A]">Actividad:</strong> Asesoramiento en fertilidad y reproducción asistida</p>
-        <p><strong className="text-[#2A2A2A]">Email de contacto:</strong> hola@fertilidadatulado.es</p>
-        <p><strong className="text-[#2A2A2A]">Dominio:</strong> fertilidadatulado.es</p>
+        <p><strong className="text-[#2A2A2A]">Email de contacto:</strong> hola@fertilidadatulado.com</p>
+        <p><strong className="text-[#2A2A2A]">Dominio:</strong> fertilidadatulado.com</p>
 
         <h2 className="font-serif text-xl text-[#2A2A2A] mt-8">Condiciones de uso</h2>
         <p>El acceso y uso de este sitio web atribuye la condición de usuario e implica la aceptación plena y sin reservas de todas las disposiciones incluidas en este Aviso Legal. El usuario se compromete a hacer un uso adecuado de los contenidos y servicios ofrecidos.</p>

@@ -16,7 +16,7 @@ export default function Privacidad() {
 
         <h2 className="font-serif text-xl text-[#2A2A2A] mt-8">Responsable del tratamiento</h2>
         <p><strong className="text-[#2A2A2A]">Identidad:</strong> Lidia [apellidos] · NIF: [NIF]<br />
-        <strong className="text-[#2A2A2A]">Email:</strong> hola@fertilidadatulado.es</p>
+        <strong className="text-[#2A2A2A]">Email:</strong> hola@fertilidadatulado.com</p>
 
         <h2 className="font-serif text-xl text-[#2A2A2A] mt-8">Finalidad del tratamiento</h2>
         <ul className="list-disc list-inside space-y-1">
@@ -32,7 +32,7 @@ export default function Privacidad() {
         <p>Los datos se conservarán durante el tiempo necesario para la prestación del servicio y el cumplimiento de las obligaciones legales aplicables.</p>
 
         <h2 className="font-serif text-xl text-[#2A2A2A] mt-8">Tus derechos</h2>
-        <p>Puedes ejercer tus derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición enviando un email a hola@fertilidadatulado.es con asunto "Protección de datos".</p>
+        <p>Puedes ejercer tus derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición enviando un email a hola@fertilidadatulado.com con asunto "Protección de datos".</p>
 
         <h2 className="font-serif text-xl text-[#2A2A2A] mt-8">Datos especialmente protegidos</h2>
         <p>Dado que los servicios están relacionados con la salud, los datos que compartas tienen la categoría de datos especialmente protegidos (art. 9 RGPD). Solo se tratan con tu consentimiento explícito y para la prestación del servicio.</p>
