@@ -8,10 +8,8 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
-// TODO: cambiar a 'hola@fertilidadatulado.es' cuando el dominio esté verificado en Resend
-const LIDIA_EMAIL = 'sergiociria2@gmail.com'
-// Cambiar por 'Fertilidad a Tu Lado <noreply@fertilidadatulado.es>' cuando el dominio esté verificado en Resend
-const FROM_ADDRESS = 'Fertilidad a Tu Lado <onboarding@resend.dev>'
+const LIDIA_EMAIL  = 'hola@fertilidadatulado.com'
+const FROM_ADDRESS = 'Fertilidad a Tu Lado <hola@fertilidadatulado.com>'
 
 const SERVICE_LABELS = {
   preconcepcion: 'Asesoría Preconcepción',
@@ -95,7 +93,7 @@ export default async function handler(req, res) {
     // TODO: cambiar 'to' a simplemente `email` cuando el dominio esté verificado
     await resend.emails.send({
       from: FROM_ADDRESS,
-      to: 'sergiociria2@gmail.com', // en prod: to: email
+      to: email,
       subject: 'He recibido tu consulta — Lidia · Fertilidad a Tu Lado',
       html: `
         <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2A2A2A;">
