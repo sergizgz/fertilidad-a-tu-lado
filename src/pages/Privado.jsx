@@ -494,18 +494,34 @@ function ImageUploadCard({ label, settingKey, currentUrl, onUploaded }) {
     setStatus(null)
   }
 
+  // Comprime la imagen usando Canvas antes de subir
+  const compressImage = (file, maxW = 1920, quality = 0.85) =>
+    new Promise((resolve) => {
+      const img = new Image()
+      img.onload = () => {
+        const scale = Math.min(1, maxW / img.width)
+        const canvas = document.createElement('canvas')
+        canvas.width  = Math.round(img.width  * scale)
+        canvas.height = Math.round(img.height * scale)
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+        canvas.toBlob(resolve, 'image/jpeg', quality)
+      }
+      img.src = URL.createObjectURL(file)
+    })
+
   const handleUpload = async () => {
     if (!file) return
     setStatus('uploading')
     setErrorMsg('')
     try {
-      const ext  = file.name.split('.').pop().toLowerCase()
-      const path = settingKey === 'hero_image_url' ? `hero.${ext}` : `lidia.${ext}`
+      // Comprimir antes de subir (máx 1920px, calidad 85%)
+      const compressed = await compressImage(file)
+      const path = settingKey === 'hero_image_url' ? 'hero.jpg' : 'lidia.jpg'
 
       // 1. Subir al bucket
       const { error: uploadError } = await supabase.storage
         .from('site-images')
-        .upload(path, file, { upsert: true, contentType: file.type })
+        .upload(path, compressed, { upsert: true, contentType: 'image/jpeg' })
       if (uploadError) throw uploadError
 
       // 2. Obtener URL pública
