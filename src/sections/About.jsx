@@ -1,6 +1,7 @@
 import { CheckCircle } from 'lucide-react'
+import { useSiteSettings } from '../hooks/useSiteSettings'
 
-const LIDIA_PHOTO_PLACEHOLDER = '/lidia.jpg'
+const LIDIA_PHOTO_FALLBACK = '/lidia.jpg'
 
 const credentials = [
   'Enfermera especialista, +15 años en reproducción asistida',
@@ -10,6 +11,9 @@ const credentials = [
 ]
 
 export default function About() {
+  const { settings } = useSiteSettings()
+  const lidiaPhoto = settings.lidia_photo_url || LIDIA_PHOTO_FALLBACK
+
   return (
     <section id="sobre-mi" className="py-24 bg-cream-dark">
       <div className="max-w-6xl mx-auto px-5">
@@ -18,8 +22,8 @@ export default function About() {
           <div className="relative">
             <div className="rounded-3xl overflow-hidden shadow-lg h-full min-h-[480px]">
               <img
-                src={LIDIA_PHOTO_PLACEHOLDER}
-                alt="Placeholder de retrato (sustituir por foto de Lidia en producción)"
+                src={lidiaPhoto}
+                alt="Lidia, enfermera especialista en reproducción asistida"
                 className="w-full h-full object-cover object-[center_20%]"
               />
             </div>

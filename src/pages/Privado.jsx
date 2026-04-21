@@ -5,7 +5,7 @@ import {
   LogIn, LogOut, LayoutDashboard, Mail, ChevronDown, ChevronUp,
   TrendingUp, Users, Calendar, Tag, MessageSquare, Search,
   Download, ExternalLink, Menu, X, StickyNote, CheckCircle2,
-  Clock, PhoneCall, XCircle, BookOpen,
+  Clock, PhoneCall, XCircle, BookOpen, ImageIcon, Upload, CheckCircle, AlertCircle, Loader2,
 } from 'lucide-react'
 import PostList from '../components/blog/PostList'
 import PostEditor from '../components/blog/PostEditor'
@@ -477,10 +477,171 @@ function BlogSection({ token }) {
   return <PostList key={listKey} token={token} onNew={handleNew} onEdit={handleEdit} />
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Sección: Imágenes
+// ─────────────────────────────────────────────────────────────────────────────
+function ImageUploadCard({ label, settingKey, currentUrl, onUploaded }) {
+  const [file, setFile]       = useState(null)
+  const [preview, setPreview] = useState(null)
+  const [status, setStatus]   = useState(null) // null | 'uploading' | 'ok' | 'error'
+  const [errorMsg, setErrorMsg] = useState('')
+
+  const handleFile = (e) => {
+    const f = e.target.files[0]
+    if (!f) return
+    setFile(f)
+    setPreview(URL.createObjectURL(f))
+    setStatus(null)
+  }
+
+  const handleUpload = async () => {
+    if (!file) return
+    setStatus('uploading')
+    setErrorMsg('')
+    try {
+      const ext  = file.name.split('.').pop().toLowerCase()
+      const path = settingKey === 'hero_image_url' ? `hero.${ext}` : `lidia.${ext}`
+
+      // 1. Subir al bucket
+      const { error: uploadError } = await supabase.storage
+        .from('site-images')
+        .upload(path, file, { upsert: true, contentType: file.type })
+      if (uploadError) throw uploadError
+
+      // 2. Obtener URL pública
+      const { data: { publicUrl } } = supabase.storage
+        .from('site-images')
+        .getPublicUrl(path)
+      const urlWithBuster = `${publicUrl}?v=${Date.now()}`
+
+      // 3. Guardar en site_settings
+      const { error: settingError } = await supabase
+        .from('site_settings')
+        .upsert({ key: settingKey, value: urlWithBuster, updated_at: new Date().toISOString() })
+      if (settingError) throw settingError
+
+      setStatus('ok')
+      onUploaded(urlWithBuster)
+    } catch (err) {
+      setStatus('error')
+      setErrorMsg(err.message ?? 'Error al subir la imagen')
+    }
+  }
+
+  const displayUrl = preview || currentUrl
+
+  return (
+    <div className="bg-white rounded-2xl border border-cream-darker/30 overflow-hidden">
+      {/* Preview */}
+      <div className="relative bg-cream-dark" style={{ aspectRatio: settingKey === 'hero_image_url' ? '16/7' : '1/1', maxHeight: 220, overflow: 'hidden' }}>
+        {displayUrl ? (
+          <img
+            src={displayUrl}
+            alt={label}
+            className="w-full h-full object-cover"
+            style={{ objectPosition: settingKey === 'lidia_photo_url' ? 'center 20%' : 'center center' }}
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full text-[#9B9B9B]">
+            <ImageIcon size={32} />
+          </div>
+        )}
+        {preview && (
+          <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full">
+            Vista previa
+          </div>
+        )}
+      </div>
+
+      {/* Controls */}
+      <div className="p-5">
+        <p className="font-medium text-[#2A2A2A] text-sm mb-1">{label}</p>
+        {currentUrl && !preview && (
+          <p className="text-xs text-[#9B9B9B] mb-3 truncate" title={currentUrl}>
+            {currentUrl.replace(/\?v=\d+$/, '').split('/').pop()}
+          </p>
+        )}
+
+        <div className="flex items-center gap-3 mt-3">
+          <label className="cursor-pointer flex items-center gap-2 bg-cream-dark hover:bg-cream-darker text-[#2A2A2A] text-sm font-medium px-4 py-2 rounded-full transition-colors">
+            <Upload size={14} />
+            Elegir foto
+            <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleFile} />
+          </label>
+
+          {file && (
+            <button
+              onClick={handleUpload}
+              disabled={status === 'uploading'}
+              className="flex items-center gap-2 bg-rose-accent hover:bg-rose-dark disabled:opacity-60 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors"
+            >
+              {status === 'uploading'
+                ? <><Loader2 size={14} className="animate-spin" /> Subiendo...</>
+                : <><Upload size={14} /> Publicar</>
+              }
+            </button>
+          )}
+        </div>
+
+        {status === 'ok' && (
+          <p className="flex items-center gap-1.5 text-green-600 text-xs mt-3">
+            <CheckCircle size={13} /> Imagen actualizada correctamente. Los cambios ya son visibles en la web.
+          </p>
+        )}
+        {status === 'error' && (
+          <p className="flex items-center gap-1.5 text-red-500 text-xs mt-3">
+            <AlertCircle size={13} /> {errorMsg}
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function ImagesSection() {
+  const [settings, setSettings] = useState({})
+
+  useEffect(() => {
+    supabase.from('site_settings').select('key, value').then(({ data }) => {
+      if (data) setSettings(Object.fromEntries(data.map(r => [r.key, r.value])))
+    })
+  }, [])
+
+  const handleUploaded = (key, url) => {
+    setSettings(prev => ({ ...prev, [key]: url }))
+  }
+
+  return (
+    <div>
+      <div className="mb-6">
+        <h2 className="font-serif text-xl text-[#2A2A2A]">Imágenes de la web</h2>
+        <p className="text-sm text-[#9B9B9B] mt-1">
+          Sube una foto nueva para reemplazar la imagen actual. El cambio es inmediato.
+        </p>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ImageUploadCard
+          label="Foto principal (Hero)"
+          settingKey="hero_image_url"
+          currentUrl={settings.hero_image_url}
+          onUploaded={(url) => handleUploaded('hero_image_url', url)}
+        />
+        <ImageUploadCard
+          label="Foto de Lidia (Sobre mí)"
+          settingKey="lidia_photo_url"
+          currentUrl={settings.lidia_photo_url}
+          onUploaded={(url) => handleUploaded('lidia_photo_url', url)}
+        />
+      </div>
+    </div>
+  )
+}
+
 const NAV_ITEMS = [
   { id: 'stats', label: 'Resumen', icon: LayoutDashboard },
   { id: 'submissions', label: 'Solicitudes', icon: Mail },
   { id: 'blog', label: 'Blog', icon: BookOpen },
+  { id: 'images', label: 'Imágenes', icon: ImageIcon },
 ]
 
 function Dashboard({ session, onLogout }) {
@@ -586,6 +747,7 @@ function Dashboard({ session, onLogout }) {
               {activeSection === 'blog' && (
                 <BlogSection token={session.access_token} />
               )}
+              {activeSection === 'images' && <ImagesSection />}
             </>
           )}
         </main>

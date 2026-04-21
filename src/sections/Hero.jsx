@@ -1,15 +1,13 @@
 import { Heart } from 'lucide-react'
+import { useSiteSettings } from '../hooks/useSiteSettings'
 
-/** Apaisada (cover ~21:9 desde original). Unsplash — Jametlene Reskp / pareja y embarazo al atardecer. */
-const HERO_IMAGE =
+const HERO_IMAGE_FALLBACK =
   'https://images.unsplash.com/photo-1763106377335-578cf40ce82e?w=1920&h=820&q=85&auto=format&fit=crop'
 
-/** Otras opciones libres (cambia la URL de arriba): manos y sol — Brooke Balentine · pareja luz cálida — Hanna Lazar
- *  https://images.unsplash.com/photo-1741900460437-99811b6d938f?w=1920&h=820&q=85&auto=format&fit=crop
- *  https://images.unsplash.com/photo-1763713512973-4be054e5400d?w=1920&h=820&q=85&auto=format&fit=crop
- */
-
 export default function Hero() {
+  const { settings } = useSiteSettings()
+  const heroImage = settings.hero_image_url || HERO_IMAGE_FALLBACK
+
   const scrollToContact = () => {
     document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -18,8 +16,7 @@ export default function Hero() {
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{
-        /* Misma familia cromática que el resto del sitio (rose-accent / rose-soft / cream) */
-        backgroundImage: `url(${HERO_IMAGE}), linear-gradient(135deg, #A55A6E 0%, #C9788A 38%, #E09AAA 72%, #F2C8D0 100%)`,
+        backgroundImage: `url(${heroImage}), linear-gradient(135deg, #A55A6E 0%, #C9788A 38%, #E09AAA 72%, #F2C8D0 100%)`,
         backgroundSize: 'cover',
         backgroundPosition: '56% 42%',
         backgroundBlendMode: 'normal',
