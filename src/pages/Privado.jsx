@@ -127,6 +127,15 @@ function LoginForm({ onLogin }) {
 // Sección: Estadísticas
 // ─────────────────────────────────────────────────────────────────────────────
 function StatsSection({ submissions }) {
+  const [subscriberCount, setSubscriberCount] = useState(null)
+
+  useEffect(() => {
+    supabase
+      .from('subscribers')
+      .select('id', { count: 'exact', head: true })
+      .then(({ count }) => setSubscriberCount(count ?? 0))
+  }, [])
+
   const now = new Date()
   const thisMonth = submissions.filter(s => {
     const d = new Date(s.created_at)
@@ -154,6 +163,7 @@ function StatsSection({ submissions }) {
     { label: 'Este mes', value: thisMonth.length, icon: Calendar, color: 'text-purple-500', bg: 'bg-purple-50' },
     { label: 'Esta semana', value: thisWeek.length, icon: TrendingUp, color: 'text-amber-500', bg: 'bg-amber-50' },
     { label: 'Personas únicas', value: uniqueEmails, icon: Users, color: 'text-teal-500', bg: 'bg-teal-50' },
+    { label: 'Suscriptores guía', value: subscriberCount ?? '…', icon: Download, color: 'text-emerald-600', bg: 'bg-emerald-50' },
   ]
 
   return (
@@ -161,7 +171,7 @@ function StatsSection({ submissions }) {
       <h2 className="font-serif text-xl text-[#2A2A2A]">Resumen</h2>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {stats.map(({ label, value, icon: Icon, color, bg }) => (
           <div key={label} className="bg-white rounded-2xl p-5 border border-cream-darker/20">
             <div className={`inline-flex items-center justify-center w-10 h-10 rounded-xl ${bg} mb-3`}>
@@ -1072,12 +1082,160 @@ function ServicesSection() {
   )
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Sección: Suscriptores (guía gratuita)
+// ─────────────────────────────────────────────────────────────────────────────
+function SubscribersSection() {
+  const [subscribers, setSubscribers] = useState([])
+  const [loading, setLoading]         = useState(true)
+  const [search, setSearch]           = useState('')
+  const [sortDir, setSortDir]         = useState('desc')
+
+  useEffect(() => {
+    supabase
+      .from('subscribers')
+      .select('id, email, created_at, source')
+      .order('created_at', { ascending: false })
+      .then(({ data }) => { if (data) setSubscribers(data) })
+      .finally(() => setLoading(false))
+  }, [])
+
+  const exportSubscribersXLSX = (data) => {
+    const rows = data.map(s => ({
+      'Email':  s.email,
+      'Fecha':  fmt(s.created_at),
+      'Origen': s.source ?? 'web',
+    }))
+    const ws = XLSX.utils.json_to_sheet(rows)
+    ws['!cols'] = [{ wch: 36 }, { wch: 22 }, { wch: 16 }]
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Suscriptores')
+    XLSX.writeFile(wb, `suscriptores_${new Date().toISOString().slice(0, 10)}.xlsx`)
+  }
+
+  const filtered = subscribers
+    .filter(s => s.email.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => {
+      const va = a.created_at; const vb = b.created_at
+      return sortDir === 'desc' ? vb.localeCompare(va) : va.localeCompare(vb)
+    })
+
+  if (loading) return (
+    <div className="flex items-center justify-center h-40 text-[#9B9B9B] text-sm">
+      <Loader2 size={18} className="animate-spin mr-2" /> Cargando...
+    </div>
+  )
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 className="font-serif text-xl text-[#2A2A2A]">
+            Suscriptores — Guía gratuita
+            <span className="ml-2 text-sm font-sans font-normal text-[#9B9B9B]">({filtered.length})</span>
+          </h2>
+          <p className="text-sm text-[#9B9B9B] mt-0.5">Personas que han descargado la guía de fertilidad</p>
+        </div>
+        <button
+          onClick={() => exportSubscribersXLSX(filtered)}
+          className="inline-flex items-center gap-2 text-sm text-rose-accent hover:text-rose-dark border border-rose-soft rounded-full px-4 py-2 transition-colors shrink-0"
+        >
+          <Download size={14} /> Exportar Excel
+        </button>
+      </div>
+
+      {/* Buscador + orden */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9B9B9B]" />
+          <input
+            type="text"
+            placeholder="Buscar por email..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="w-full border border-cream-darker rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:border-rose-accent bg-white transition-colors"
+          />
+        </div>
+        <select
+          value={sortDir}
+          onChange={e => setSortDir(e.target.value)}
+          className="border border-cream-darker rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-rose-accent bg-white text-[#4A4A4A]"
+        >
+          <option value="desc">Más recientes primero</option>
+          <option value="asc">Más antiguos primero</option>
+        </select>
+      </div>
+
+      {/* Tabla */}
+      {filtered.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-cream-darker/20 py-16 text-center">
+          <Users size={32} className="mx-auto mb-3 text-[#C0C0C0]" />
+          <p className="text-sm text-[#9B9B9B]">
+            {search ? 'No hay resultados para esa búsqueda.' : 'Todavía no hay suscriptores.'}
+          </p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-2xl border border-cream-darker/20 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-cream-dark bg-cream/50">
+                  <th className="text-left px-4 py-3 font-medium text-[#6B6B6B]">Email</th>
+                  <th
+                    className="text-left px-4 py-3 font-medium text-[#6B6B6B] cursor-pointer hover:text-rose-accent select-none whitespace-nowrap"
+                    onClick={() => setSortDir(d => d === 'asc' ? 'desc' : 'asc')}
+                  >
+                    <span className="inline-flex items-center gap-1">
+                      Fecha de descarga
+                      {sortDir === 'asc'
+                        ? <ChevronUp size={13} className="text-rose-accent" />
+                        : <ChevronDown size={13} className="text-rose-accent" />}
+                    </span>
+                  </th>
+                  <th className="text-left px-4 py-3 font-medium text-[#6B6B6B]">Origen</th>
+                  <th className="px-4 py-3 font-medium text-[#6B6B6B]">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map(s => (
+                  <tr key={s.id} className="border-b border-cream-dark/50 hover:bg-cream/30 transition-colors">
+                    <td className="px-4 py-3 text-[#2A2A2A] font-medium">{s.email}</td>
+                    <td className="px-4 py-3 text-[#9B9B9B] whitespace-nowrap">{fmtShort(s.created_at)}</td>
+                    <td className="px-4 py-3">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-soft/40 text-rose-dark">
+                        {s.source ?? 'web'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <a
+                        href={`mailto:${s.email}`}
+                        className="inline-flex items-center gap-1 text-xs text-rose-accent hover:text-rose-dark font-medium whitespace-nowrap"
+                      >
+                        <ExternalLink size={12} /> Escribir
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="px-4 py-3 border-t border-cream-dark bg-cream/30 text-xs text-[#9B9B9B]">
+            {filtered.length} suscriptor{filtered.length !== 1 ? 'es' : ''}
+            {search && ` · filtrando de ${subscribers.length} total`}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 const NAV_ITEMS = [
-  { id: 'stats', label: 'Resumen', icon: LayoutDashboard },
-  { id: 'submissions', label: 'Solicitudes', icon: Mail },
-  { id: 'blog', label: 'Blog', icon: BookOpen },
-  { id: 'services', label: 'Servicios', icon: Layers },
-  { id: 'images', label: 'Imágenes', icon: ImageIcon },
+  { id: 'stats',       label: 'Resumen',      icon: LayoutDashboard },
+  { id: 'submissions', label: 'Solicitudes',  icon: Mail },
+  { id: 'subscribers', label: 'Suscriptores', icon: Users },
+  { id: 'blog',        label: 'Blog',         icon: BookOpen },
+  { id: 'services',    label: 'Servicios',    icon: Layers },
+  { id: 'images',      label: 'Imágenes',     icon: ImageIcon },
 ]
 
 function Dashboard({ session, onLogout }) {
@@ -1180,6 +1338,7 @@ function Dashboard({ session, onLogout }) {
                   token={session.access_token}
                 />
               )}
+              {activeSection === 'subscribers' && <SubscribersSection />}
               {activeSection === 'blog' && (
                 <BlogSection token={session.access_token} />
               )}
