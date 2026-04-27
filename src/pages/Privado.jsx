@@ -16,18 +16,30 @@ import { ICON_MAP } from '../sections/Services'
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
-const SERVICE_LABELS = {
+// Etiquetas legacy para envíos anteriores a la gestión dinámica de servicios
+const LEGACY_SERVICE_LABELS = {
   preconcepcion: 'Preconcepción',
   fiv: 'FIV / IA',
   consulta: 'Consulta puntual',
   otro: 'Orientación general',
 }
 
-const SERVICE_COLORS = {
+// Si el valor es un slug antiguo lo traduce; si ya es un título legible lo devuelve tal cual
+function resolveServiceLabel(service) {
+  if (!service) return '—'
+  return LEGACY_SERVICE_LABELS[service] ?? service
+}
+
+// Color genérico para servicios dinámicos que no están en el mapa legacy
+const LEGACY_SERVICE_COLORS = {
   preconcepcion: 'bg-purple-100 text-purple-700',
   fiv: 'bg-rose-100 text-rose-700',
   consulta: 'bg-amber-100 text-amber-700',
   otro: 'bg-slate-100 text-slate-600',
+}
+
+function serviceColor(service) {
+  return LEGACY_SERVICE_COLORS[service] ?? 'bg-rose-50 text-rose-700'
 }
 
 const STATUS_CONFIG = {
@@ -55,8 +67,9 @@ function exportXLSX(data) {
     'Fecha':    fmt(s.created_at),
     'Nombre':   s.name,
     'Email':    s.email,
-    'Servicio': SERVICE_LABELS[s.service] ?? s.service ?? '—',
+    'Servicio': resolveServiceLabel(s.service),
     'Estado':   STATUS_CONFIG[s.status]?.label ?? s.status ?? 'Pendiente',
+
     'Mensaje':  s.message,
     'Notas':    s.notes ?? '',
   }))
@@ -142,7 +155,7 @@ function StatsSection({ submissions, subscriberCount }) {
 
   const byService = Object.entries(
     submissions.reduce((acc, s) => {
-      const key = SERVICE_LABELS[s.service] ?? 'Sin especificar'
+      const key = resolveServiceLabel(s.service) === '—' ? 'Sin especificar' : resolveServiceLabel(s.service)
       acc[key] = (acc[key] || 0) + 1
       return acc
     }, {})
@@ -241,6 +254,11 @@ function SubmissionsSection({ submissions, onUpdate, token }) {
     else { setSortField(field); setSortDir('asc') }
   }
 
+  // Opciones únicas de servicio presentes en los envíos reales
+  const serviceOptions = [...new Set(submissions.map(s => s.service).filter(Boolean))]
+    .map(val => ({ val, label: resolveServiceLabel(val) }))
+    .sort((a, b) => a.label.localeCompare(b.label))
+
   const filtered = submissions
     .filter(s =>
       (!serviceFilter || s.service === serviceFilter) &&
@@ -308,7 +326,7 @@ function SubmissionsSection({ submissions, onUpdate, token }) {
         <select value={serviceFilter} onChange={e => setServiceFilter(e.target.value)}
           className="border border-cream-darker rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-rose-accent bg-white text-[#4A4A4A]">
           <option value="">Todos los servicios</option>
-          {Object.entries(SERVICE_LABELS).map(([val, label]) => (
+          {serviceOptions.map(({ val, label }) => (
             <option key={val} value={val}>{label}</option>
           ))}
         </select>
@@ -368,8 +386,8 @@ function SubmissionsSection({ submissions, onUpdate, token }) {
                         <td className="px-4 py-3 text-[#4A4A4A] whitespace-nowrap">{s.email}</td>
                         <td className="px-4 py-3">
                           {s.service
-                            ? <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${SERVICE_COLORS[s.service] ?? 'bg-slate-100 text-slate-600'}`}>
-                                {SERVICE_LABELS[s.service] ?? s.service}
+                            ? <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${serviceColor(s.service)}`}>
+                                {resolveServiceLabel(s.service)}
                               </span>
                             : <span className="text-[#C0C0C0]">—</span>}
                         </td>

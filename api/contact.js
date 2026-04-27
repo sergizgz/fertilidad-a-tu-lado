@@ -29,7 +29,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Faltan campos obligatorios' })
   }
 
-  const serviceLabel = SERVICE_LABELS[service] || 'Sin especificar'
+  // Si es un slug legacy lo traduce; si ya viene como título legible lo usa directamente
+  const serviceLabel = SERVICE_LABELS[service] || service || 'Sin especificar'
 
   try {
     // ── 0. Guardar en Supabase ──────────────────────────────────────────────

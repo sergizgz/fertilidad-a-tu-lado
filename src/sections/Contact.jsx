@@ -1,11 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Send, AtSign, Mail, CheckCircle } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '', service: '' })
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [services, setServices] = useState([])
+
+  useEffect(() => {
+    supabase
+      .from('services')
+      .select('id, title')
+      .eq('active', true)
+      .order('sort_order')
+      .then(({ data }) => { if (data) setServices(data) })
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -87,10 +98,10 @@ export default function Contact() {
                     className="w-full border border-cream-darker rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-accent bg-cream/50 text-[#6B6B6B] transition-colors"
                   >
                     <option value="">Selecciona una opción</option>
-                    <option value="preconcepcion">Asesoría Preconcepción</option>
-                    <option value="fiv">Acompañamiento FIV/IA</option>
-                    <option value="consulta">Consulta Puntual</option>
-                    <option value="otro">No sé, necesito orientación</option>
+                    {services.map(s => (
+                      <option key={s.id} value={s.title}>{s.title}</option>
+                    ))}
+                    <option value="No sé, necesito orientación">No sé, necesito orientación</option>
                   </select>
                 </div>
 
