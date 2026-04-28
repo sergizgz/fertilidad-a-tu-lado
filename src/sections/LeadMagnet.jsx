@@ -101,13 +101,13 @@ export default function LeadMagnet() {
                     <img
                       src="/portada-ebook2.png"
                       alt=""
-                      className="absolute inset-0 w-full h-full object-cover object-top mix-blend-overlay opacity-85"
+                      className="absolute inset-0 w-full h-full object-cover object-top"
                       onError={e => { e.target.style.display = 'none' }}
                     />
 
-                    {/* Overlay degradado */}
+                    {/* Overlay degradado solo en la parte baja para que se lea el texto */}
                     <div className="absolute inset-0"
-                         style={{ background: 'linear-gradient(to bottom, rgba(40,10,20,0.1) 0%, rgba(40,10,20,0.45) 65%, rgba(40,10,20,0.75) 100%)' }} />
+                         style={{ background: 'linear-gradient(to bottom, transparent 40%, rgba(40,10,20,0.7) 80%, rgba(40,10,20,0.92) 100%)' }} />
 
                     {/* Contenido portada */}
                     <div className="absolute inset-0 p-5 flex flex-col justify-between z-10">
