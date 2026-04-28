@@ -119,7 +119,7 @@ export default function LeadMagnet() {
                       </div>
 
                       <div>
-                        <p style={{ fontSize: '10px', color: 'rgba(242,200,208,0.7)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                        <p style={{ fontSize: '10px', color: 'white', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px', fontWeight: 700, textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
                           Guía gratuita
                         </p>
                       </div>
