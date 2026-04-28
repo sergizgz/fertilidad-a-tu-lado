@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Por qué no te quedas embarazada — Fertilidad a Tu Lado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream:        #FEF9FA;
+    --cream-dark:   #F7EAED;
+    --cream-darker: #EDD5DC;
+    --rose-soft:    #F2C8D0;
+    --rose-medium:  #E09AAA;
+    --rose-accent:  #C9788A;
+    --rose-dark:    #A55A6E;
+    --dark:         #2A2A2A;
+    --mid:          #6B6B6B;
+    --light:        #9B9B9B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #e8e8e8;
+    color: var(--dark);
+  }
+
+  /* ── PAGE SHELL ── */
+  .page {
+    width: 148mm;
+    min-height: 210mm;
+    background: var(--cream);
+    margin: 8mm auto;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── LOGO SVG ── */
+  .logo { display: flex; align-items: center; gap: 8px; }
+  .logo svg { flex-shrink: 0; }
+  .logo-text { font-family: 'Lora', serif; font-size: 11px; color: white; letter-spacing: 0.02em; line-height: 1.3; }
+  .logo-text span { display: block; font-size: 9px; font-weight: 400; opacity: 0.85; }
+  .logo-text-dark { color: var(--rose-dark); }
+  .logo-text-dark span { color: var(--mid); }
+
+  /* ══════════════════════════════════════════
+     COVER PAGE
+  ══════════════════════════════════════════ */
+  .cover {
+    background:
+      linear-gradient(160deg, #3d1520 0%, #6b2c3f 40%, #8f4560 70%, #a55a6e 100%);
+    min-height: 210mm;
+    padding: 0;
+  }
+
+  .cover-top {
+    padding: 10mm 10mm 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .cover-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 8px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cover-body {
+    padding: 8mm 10mm;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .cover-eyebrow {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rose-soft);
+    margin-bottom: 6mm;
+  }
+
+  .cover-title {
+    font-family: 'Lora', serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: white;
+    margin-bottom: 4mm;
+  }
+
+  .cover-title em {
+    font-style: italic;
+    color: var(--rose-soft);
+  }
+
+  .cover-subtitle {
+    font-size: 10px;
+    color: rgba(255,255,255,0.70);
+    line-height: 1.6;
+    max-width: 110mm;
+    margin-bottom: 8mm;
+  }
+
+  .cover-divider {
+    width: 30mm;
+    height: 2px;
+    background: linear-gradient(90deg, var(--rose-medium), transparent);
+    margin-bottom: 8mm;
+  }
+
+  .cover-footer {
+    background: rgba(0,0,0,0.25);
+    padding: 5mm 10mm;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cover-footer-by {
+    font-size: 8px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .cover-decoration {
+    position: absolute;
+    top: 0; right: 0;
+    width: 50mm;
+    height: 50mm;
+    background: radial-gradient(circle at 80% 20%, rgba(242,200,208,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cover-decoration-2 {
+    position: absolute;
+    bottom: 30mm; left: -10mm;
+    width: 40mm;
+    height: 40mm;
+    background: radial-gradient(circle, rgba(201,120,138,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════
+     INNER PAGES — SHARED
+  ══════════════════════════════════════════ */
+  .page-header {
+    padding: 5mm 10mm 4mm;
+    border-bottom: 1px solid var(--cream-darker);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .page-header-title {
+    font-size: 8px;
+    color: var(--light);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .page-content {
+    padding: 7mm 10mm;
+    flex: 1;
+  }
+
+  .page-footer {
+    padding: 4mm 10mm;
+    border-top: 1px solid var(--cream-darker);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .page-footer-brand {
+    font-size: 7.5px;
+    color: var(--rose-accent);
+    font-weight: 500;
+  }
+
+  .page-num {
+    font-size: 8px;
+    color: var(--light);
+    font-weight: 400;
+  }
+
+  /* ══════════════════════════════════════════
+     INDEX PAGE
+  ══════════════════════════════════════════ */
+  .index-hero {
+    background: linear-gradient(135deg, var(--rose-dark), var(--rose-accent));
+    padding: 8mm 10mm;
+    margin-bottom: 0;
+  }
+
+  .index-hero h2 {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 2mm;
+  }
+
+  .index-hero p {
+    font-size: 9px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 400;
+  }
+
+  .index-list {
+    padding: 5mm 10mm;
+    flex: 1;
+  }
+
+  .index-item {
+    display: flex;
+    align-items: baseline;
+    gap: 4mm;
+    padding: 2.8mm 0;
+    border-bottom: 1px solid var(--cream-darker);
+  }
+  .index-item:last-child { border-bottom: none; }
+
+  .index-num {
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--rose-accent);
+    min-width: 6mm;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .index-name {
+    font-size: 9.5px;
+    color: var(--dark);
+    line-height: 1.4;
+    font-weight: 400;
+  }
+
+  .index-dot {
+    flex: 1;
+    border-bottom: 1px dotted var(--cream-darker);
+    margin: 0 1mm;
+    position: relative;
+    top: -2px;
+  }
+
+  .index-page {
+    font-size: 8px;
+    color: var(--light);
+    flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════════════════
+     CHAPTER OPENERS
+  ══════════════════════════════════════════ */
+  .chapter-opener {
+    background: white;
+  }
+
+  .chapter-stripe {
+    height: 2mm;
+    background: linear-gradient(90deg, var(--rose-dark), var(--rose-accent), var(--rose-soft));
+  }
+
+  .chapter-header {
+    padding: 8mm 10mm 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 4mm;
+    margin-bottom: 5mm;
+  }
+
+  .chapter-num-block {
+    background: linear-gradient(135deg, var(--rose-dark), var(--rose-accent));
+    border-radius: 10px;
+    padding: 3mm 4mm;
+    text-align: center;
+    flex-shrink: 0;
+    min-width: 16mm;
+  }
+
+  .chapter-num-label {
+    font-size: 7px;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1mm;
+  }
+
+  .chapter-num-value {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+  }
+
+  .chapter-title-area {
+    flex: 1;
+  }
+
+  .chapter-label {
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--rose-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2mm;
+  }
+
+  .chapter-title {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.3;
+  }
+
+  /* ══════════════════════════════════════════
+     TYPOGRAPHY
+  ══════════════════════════════════════════ */
+  .body-text {
+    font-size: 9.5px;
+    line-height: 1.75;
+    color: var(--mid);
+    margin-bottom: 4mm;
+  }
+
+  .body-text strong {
+    color: var(--dark);
+    font-weight: 600;
+  }
+
+  .body-text em {
+    color: var(--rose-dark);
+    font-style: italic;
+  }
+
+  h3.section-head {
+    font-family: 'Lora', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 3mm;
+    margin-top: 4mm;
+  }
+
+  h4.section-sub {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--rose-dark);
+    margin-bottom: 2mm;
+    margin-top: 3mm;
+  }
+
+  /* ══════════════════════════════════════════
+     CALLOUT BOXES
+  ══════════════════════════════════════════ */
+  .callout {
+    background: var(--cream-dark);
+    border-left: 3px solid var(--rose-accent);
+    border-radius: 0 8px 8px 0;
+    padding: 4mm 5mm;
+    margin: 4mm 0;
+  }
+
+  .callout-label {
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--rose-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5mm;
+  }
+
+  .callout p {
+    font-size: 9px;
+    line-height: 1.6;
+    color: var(--dark);
+  }
+
+  .callout-dark {
+    background: linear-gradient(135deg, var(--rose-dark), var(--rose-accent));
+    border-left: none;
+    border-radius: 10px;
+    padding: 5mm 6mm;
+    margin: 4mm 0;
+  }
+
+  .callout-dark .callout-label {
+    color: rgba(255,255,255,0.7);
+  }
+
+  .callout-dark p {
+    color: white;
+    font-size: 9.5px;
+    font-family: 'Lora', serif;
+    font-style: italic;
+    line-height: 1.65;
+  }
+
+  .callout-rose {
+    background: var(--rose-soft);
+    border-left: 3px solid var(--rose-dark);
+    border-radius: 0 8px 8px 0;
+    padding: 4mm 5mm;
+    margin: 4mm 0;
+  }
+
+  .callout-rose p {
+    font-size: 9px;
+    line-height: 1.6;
+    color: var(--dark);
+  }
+
+  /* ══════════════════════════════════════════
+     LISTS
+  ══════════════════════════════════════════ */
+  .styled-list {
+    list-style: none;
+    margin: 3mm 0 4mm;
+  }
+
+  .styled-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 3mm;
+    font-size: 9.5px;
+    line-height: 1.6;
+    color: var(--mid);
+    padding: 1.5mm 0;
+    border-bottom: 1px solid var(--cream-darker);
+  }
+  .styled-list li:last-child { border-bottom: none; }
+
+  .styled-list li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: var(--rose-accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .styled-list li strong { color: var(--dark); }
+
+  .number-list {
+    list-style: none;
+    margin: 3mm 0 4mm;
+    counter-reset: mycount;
+  }
+
+  .number-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 3mm;
+    font-size: 9.5px;
+    line-height: 1.6;
+    color: var(--mid);
+    padding: 2mm 0;
+    counter-increment: mycount;
+  }
+
+  .number-list li::before {
+    content: counter(mycount);
+    font-size: 8.5px;
+    font-weight: 700;
+    color: white;
+    background: var(--rose-accent);
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .number-list li strong { color: var(--dark); }
+
+  /* ══════════════════════════════════════════
+     SPECIAL ELEMENTS
+  ══════════════════════════════════════════ */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 2mm;
+    background: var(--cream-dark);
+    border: 1px solid var(--cream-darker);
+    border-radius: 20px;
+    padding: 2mm 4mm;
+    font-size: 8.5px;
+    color: var(--rose-dark);
+    font-weight: 500;
+    margin: 1mm;
+  }
+
+  .pill::before {
+    content: '●';
+    font-size: 6px;
+    color: var(--rose-accent);
+  }
+
+  .pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 3mm 0;
+  }
+
+  .big-quote {
+    font-family: 'Lora', serif;
+    font-size: 13px;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--rose-dark);
+    line-height: 1.5;
+    text-align: center;
+    padding: 5mm 6mm;
+    position: relative;
+    margin: 4mm 0;
+  }
+
+  .big-quote::before {
+    content: '"';
+    font-size: 48px;
+    color: var(--rose-soft);
+    font-family: 'Lora', serif;
+    position: absolute;
+    top: -2mm;
+    left: 4mm;
+    line-height: 1;
+  }
+
+  .case-card {
+    background: white;
+    border: 1px solid var(--cream-darker);
+    border-radius: 10px;
+    padding: 4mm 5mm;
+    margin: 3mm 0;
+  }
+
+  .case-card-head {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--rose-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 2mm;
+    display: flex;
+    align-items: center;
+    gap: 2mm;
+  }
+
+  .case-card-head::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--rose-soft);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .case-card p {
+    font-size: 9px;
+    line-height: 1.6;
+    color: var(--mid);
+  }
+
+  .myth-item {
+    background: white;
+    border: 1px solid var(--cream-darker);
+    border-radius: 10px;
+    padding: 4mm 5mm;
+    margin: 2.5mm 0;
+    display: flex;
+    gap: 3mm;
+    align-items: flex-start;
+  }
+
+  .myth-x {
+    background: #fee2e2;
+    color: #dc2626;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .myth-body strong {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--dark);
+    display: block;
+    margin-bottom: 1mm;
+  }
+
+  .myth-body p {
+    font-size: 8.5px;
+    line-height: 1.55;
+    color: var(--mid);
+  }
+
+  .action-item {
+    display: flex;
+    gap: 3mm;
+    align-items: flex-start;
+    padding: 3mm 0;
+    border-bottom: 1px solid var(--cream-darker);
+  }
+  .action-item:last-child { border-bottom: none; }
+
+  .action-icon {
+    background: linear-gradient(135deg, var(--rose-accent), var(--rose-dark));
+    color: white;
+    border-radius: 8px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .action-body strong {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--dark);
+    display: block;
+    margin-bottom: 0.5mm;
+  }
+
+  .action-body p {
+    font-size: 8.5px;
+    line-height: 1.55;
+    color: var(--mid);
+  }
+
+  .signal-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 3mm;
+    padding: 2mm 0;
+    font-size: 9.5px;
+    line-height: 1.6;
+    color: var(--mid);
+    border-bottom: 1px solid var(--cream-darker);
+  }
+  .signal-item:last-child { border-bottom: none; }
+
+  .signal-item::before {
+    content: '⚑';
+    font-size: 9px;
+    color: var(--rose-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ══════════════════════════════════════════
+     CLOSING PAGE
+  ══════════════════════════════════════════ */
+  .closing-page {
+    background: linear-gradient(160deg, #3d1520 0%, #7a3550 50%, #a55a6e 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 210mm;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .closing-deco {
+    position: absolute;
+    top: -20mm;
+    right: -10mm;
+    width: 80mm;
+    height: 80mm;
+    background: radial-gradient(circle, rgba(242,200,208,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .closing-deco-2 {
+    position: absolute;
+    bottom: 30mm;
+    left: -20mm;
+    width: 70mm;
+    height: 70mm;
+    background: radial-gradient(circle, rgba(201,120,138,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .closing-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12mm 12mm 8mm;
+    position: relative;
+    z-index: 1;
+  }
+
+  .closing-eyebrow {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rose-soft);
+    margin-bottom: 4mm;
+  }
+
+  .closing-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: white;
+    margin-bottom: 6mm;
+  }
+
+  .closing-title em {
+    color: var(--rose-soft);
+    font-style: italic;
+  }
+
+  .closing-text {
+    font-size: 9.5px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 4mm;
+  }
+
+  .closing-cta-box {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 5mm 6mm;
+    margin-top: 5mm;
+  }
+
+  .closing-cta-label {
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--rose-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2mm;
+  }
+
+  .closing-cta-url {
+    font-family: 'Lora', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .closing-cta-sub {
+    font-size: 8.5px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 1mm;
+  }
+
+  .closing-footer {
+    padding: 5mm 12mm;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  .closing-footer p {
+    font-size: 7.5px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ══════════════════════════════════════════
+     PRINT
+  ══════════════════════════════════════════ */
+  @media print {
+    body { background: white; }
+    .page { margin: 0; }
+  }
+
+  @page {
+    size: 148mm 210mm;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     PORTADA
+═══════════════════════════════════════════════════════ -->
+<div class="page cover">
+  <div class="cover-decoration"></div>
+  <div class="cover-decoration-2"></div>
+
+  <div class="cover-top">
+    <!-- Logo -->
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="rgba(242,200,208,0.9)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="rgba(201,120,138,0.75)" transform="rotate(20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="rgba(255,255,255,0.85)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="rgba(242,200,208,0.9)" stroke-width="2.2" stroke-linecap="round"/>
+        <ellipse cx="15" cy="27" rx="4" ry="6" fill="rgba(201,120,138,0.35)" transform="rotate(-30 15 27)"/>
+        <ellipse cx="25" cy="27" rx="4" ry="6" fill="rgba(201,120,138,0.35)" transform="rotate(30 25 27)"/>
+      </svg>
+      <div class="logo-text">
+        Fertilidad a Tu Lado
+        <span>por Lidia · Enfermera en Reproducción</span>
+      </div>
+    </div>
+    <div class="cover-badge">Guía gratuita</div>
+  </div>
+
+  <div class="cover-body">
+    <div class="cover-eyebrow">Fertilidad · Ciclo · Concepción</div>
+
+    <h1 class="cover-title">
+      Por qué no te quedas<br/>
+      <em>embarazada</em><br/>
+      aunque todo esté bien
+    </h1>
+
+    <p class="cover-subtitle">
+      Lo que nadie te explica sobre fertilidad, ciclos y concepción — y los errores más comunes que retrasan el proceso
+    </p>
+
+    <div class="cover-divider"></div>
+
+    <p style="font-size:9px;color:rgba(255,255,255,0.55);font-style:italic;">
+      Escrito por Lidia · Enfermera especialista en reproducción asistida con +15 años de experiencia
+    </p>
+  </div>
+
+  <div class="cover-footer">
+    <div class="logo">
+      <svg width="18" height="18" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="rgba(242,200,208,0.9)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="rgba(201,120,138,0.75)" transform="rotate(20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="rgba(255,255,255,0.85)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="rgba(242,200,208,0.9)" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <div class="logo-text">
+        fertilidadatulado.es
+        <span>Asesoramiento online en fertilidad</span>
+      </div>
+    </div>
+    <div class="cover-badge">© 2024 Fertilidad a Tu Lado</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     ÍNDICE
+═══════════════════════════════════════════════════════ -->
+<div class="page" style="background:white;">
+  <div class="index-hero">
+    <div class="logo" style="margin-bottom:3mm;">
+      <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="rgba(242,200,208,0.9)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="rgba(201,120,138,0.75)" transform="rotate(20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="rgba(255,255,255,0.85)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="rgba(242,200,208,0.9)" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <div class="logo-text"><span style="opacity:0.65;">Fertilidad a Tu Lado</span></div>
+    </div>
+    <h2>Contenido de la guía</h2>
+    <p>15 capítulos sobre fertilidad, ciclo menstrual y concepción</p>
+  </div>
+
+  <div class="index-list">
+    <div class="index-item">
+      <span class="index-num">01</span>
+      <span class="index-name">Introducción: Cuando todo parece estar bien pero no llega</span>
+      <span class="index-dot"></span>
+      <span class="index-page">4</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">02</span>
+      <span class="index-name">Lo que significa "estar bien" en fertilidad</span>
+      <span class="index-dot"></span>
+      <span class="index-page">5</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">03</span>
+      <span class="index-name">Error Nº1: No entender tu ciclo menstrual</span>
+      <span class="index-dot"></span>
+      <span class="index-page">6</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">04</span>
+      <span class="index-name">Ovulación y ventana fértil: lo que debes conocer</span>
+      <span class="index-dot"></span>
+      <span class="index-page">7</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">05</span>
+      <span class="index-name">Error Nº2: Tener relaciones en días poco fértiles</span>
+      <span class="index-dot"></span>
+      <span class="index-page">8</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">06</span>
+      <span class="index-name">Error Nº3: Confiar en aplicaciones sin conocer tu cuerpo</span>
+      <span class="index-dot"></span>
+      <span class="index-page">9</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">07</span>
+      <span class="index-name">Error Nº4: Pensar que si ovulas ya es suficiente</span>
+      <span class="index-dot"></span>
+      <span class="index-page">10</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">08</span>
+      <span class="index-name">Factores invisibles que nadie te explica</span>
+      <span class="index-dot"></span>
+      <span class="index-page">11</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">09</span>
+      <span class="index-name">El impacto del estrés (y lo que sí puedes hacer)</span>
+      <span class="index-dot"></span>
+      <span class="index-page">13</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">10</span>
+      <span class="index-name">Casos reales de consulta</span>
+      <span class="index-dot"></span>
+      <span class="index-page">14</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">11</span>
+      <span class="index-name">Mitos que están saboteando tu embarazo</span>
+      <span class="index-dot"></span>
+      <span class="index-page">15</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">12</span>
+      <span class="index-name">Qué puedes empezar a hacer desde hoy</span>
+      <span class="index-dot"></span>
+      <span class="index-page">16</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">13</span>
+      <span class="index-name">Cuándo pedir ayuda profesional</span>
+      <span class="index-dot"></span>
+      <span class="index-page">17</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">14</span>
+      <span class="index-name">Si estás en reproducción asistida</span>
+      <span class="index-dot"></span>
+      <span class="index-page">18</span>
+    </div>
+    <div class="index-item">
+      <span class="index-num">15</span>
+      <span class="index-name">No estás fallando (y no tienes que hacerlo sola)</span>
+      <span class="index-dot"></span>
+      <span class="index-page">20</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">3</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 1 — Introducción
+═══════════════════════════════════════════════════════ -->
+<div class="page chapter-opener">
+  <div class="chapter-stripe"></div>
+  <div class="chapter-header">
+    <div class="chapter-num-block">
+      <div class="chapter-num-label">Cap.</div>
+      <div class="chapter-num-value">01</div>
+    </div>
+    <div class="chapter-title-area">
+      <div class="chapter-label">Introducción</div>
+      <h2 class="chapter-title">Cuando todo parece estar bien pero no llega</h2>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <p class="body-text">
+      Has ido al médico. Te han hecho analíticas. Te han dicho que tienes los ovarios bien, que la regla viene, que las hormonas están dentro de los valores normales. Y sin embargo, el embarazo no llega.
+    </p>
+
+    <div class="callout-dark">
+      <div class="callout-label">La pregunta que lo cambia todo</div>
+      <p>¿Qué está pasando? Porque si todo está bien… ¿por qué no me quedo embarazada?</p>
+    </div>
+
+    <p class="body-text">
+      Esta guía existe precisamente para responder esa pregunta. Porque "estar bien" en fertilidad es mucho más que no tener patología evidente. Y porque hay errores muy comunes —y muy silenciosos— que pueden estar retrasando tu proceso sin que nadie te lo haya explicado.
+    </p>
+
+    <p class="body-text">
+      No es un manual médico. No sustituye una consulta con tu ginecólogo. Es información práctica, honesta y directa, escrita desde más de 15 años de experiencia acompañando a mujeres en sus procesos de búsqueda de embarazo.
+    </p>
+
+    <div class="callout">
+      <div class="callout-label">Lo que encontrarás aquí</div>
+      <p>Los <strong>4 errores más frecuentes</strong> que cometen las mujeres cuando intentan quedarse embarazadas, los factores que muchas veces se pasan por alto, y pasos concretos que puedes empezar a aplicar desde hoy.</p>
+    </div>
+
+    <p class="body-text">
+      Porque la información clara, honesta y bien explicada <em>marca una diferencia enorme</em>. Y tú mereces tenerla.
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">4</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 2 — Lo que significa "estar bien"
+═══════════════════════════════════════════════════════ -->
+<div class="page" style="background:white;">
+  <div class="page-header">
+    <span class="page-header-title">Por qué no te quedas embarazada</span>
+    <div class="logo">
+      <svg width="14" height="14" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="var(--rose-medium)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="var(--rose-soft)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="var(--rose-medium)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div style="height:2mm;background:linear-gradient(90deg,var(--rose-dark),var(--rose-accent),var(--rose-soft));"></div>
+
+  <div class="page-content">
+    <div style="margin-bottom:4mm;">
+      <div class="chapter-label">Capítulo 02</div>
+      <h3 class="section-head" style="font-size:14px;margin-top:1mm;">Lo que significa "estar bien" en fertilidad</h3>
+    </div>
+
+    <p class="body-text">
+      Cuando los médicos dicen que "todo está bien", se refieren a que no hay una patología diagnosticable que explique la dificultad. Pero la fertilidad es un proceso complejo que va mucho más allá de los valores de referencia en una analítica.
+    </p>
+
+    <div class="big-quote">
+      Estar dentro del rango normal no significa estar optimizado para la concepción.
+    </div>
+
+    <p class="body-text">
+      Puede que ovules, pero en el momento equivocado. Puede que tu ciclo sea regular, pero que no entiendas cuándo eres realmente fértil. Puede que tus hormonas sean normales, pero que haya factores inflamatorios o de estrés que interfieran con la implantación.
+    </p>
+
+    <p class="body-text">
+      La fertilidad no es un interruptor de on/off. Es un ecosistema. Y en ese ecosistema influyen:
+    </p>
+
+    <div class="pills-row">
+      <span class="pill">Ciclo menstrual</span>
+      <span class="pill">Ovulación</span>
+      <span class="pill">Ventana fértil</span>
+      <span class="pill">Calidad ovocitaria</span>
+      <span class="pill">Estado emocional</span>
+      <span class="pill">Inflamación</span>
+      <span class="pill">Nutrición</span>
+      <span class="pill">Estrés oxidativo</span>
+      <span class="pill">Salud intestinal</span>
+      <span class="pill">Hormonas</span>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Clave</div>
+      <p>La infertilidad de origen desconocido —o "inexplicada"— afecta al <strong>15-30% de las parejas</strong> que no consiguen embarazo. Muchas veces no es que algo esté roto; es que algo no está funcionando en su mejor versión.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">5</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 3 — Error Nº1
+═══════════════════════════════════════════════════════ -->
+<div class="page chapter-opener">
+  <div class="chapter-stripe"></div>
+  <div class="chapter-header">
+    <div class="chapter-num-block">
+      <div class="chapter-num-label">Error</div>
+      <div class="chapter-num-value">01</div>
+    </div>
+    <div class="chapter-title-area">
+      <div class="chapter-label">Capítulo 03</div>
+      <h2 class="chapter-title">No entender tu ciclo menstrual</h2>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <p class="body-text">
+      El ciclo menstrual no empieza ni termina con la regla. La regla es solo una parte visible de un proceso hormonal complejo que dura, de media, entre 24 y 35 días — y que es diferente en cada mujer, y a veces diferente cada mes en la misma mujer.
+    </p>
+
+    <p class="body-text">
+      Muchas mujeres creen que su ciclo "es de 28 días" porque eso es lo que aprendieron en el cole. Pero en realidad, la duración del ciclo varía, y más importante aún: <strong>el momento de la ovulación no es fijo</strong>.
+    </p>
+
+    <div class="callout-rose">
+      <p><strong>Lo que realmente importa:</strong> el ciclo tiene cuatro fases — menstrual, folicular, ovulatoria y lútea. Solo durante la fase ovulatoria (y los días previos) existe posibilidad real de concepción.</p>
+    </div>
+
+    <h4 class="section-sub">Las cuatro fases del ciclo</h4>
+
+    <ul class="styled-list">
+      <li><strong>Fase menstrual:</strong> descamación del endometrio. Dura 3-7 días.</li>
+      <li><strong>Fase folicular:</strong> los folículos maduran bajo el efecto del FSH. El estrógeno aumenta.</li>
+      <li><strong>Fase ovulatoria:</strong> pico de LH → liberación del óvulo. Dura 12-36 horas.</li>
+      <li><strong>Fase lútea:</strong> el cuerpo lúteo produce progesterona. Dura ~14 días. Si no hay embarazo, baja y viene la regla.</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">El gran error</div>
+      <p>Asumir que ovulas el día 14 cuando en realidad puedes ovular el día 10, el 16 o el 20 — dependiendo de tu ciclo.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">6</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 4 — Ovulación y ventana fértil
+═══════════════════════════════════════════════════════ -->
+<div class="page" style="background:white;">
+  <div class="page-header">
+    <span class="page-header-title">Ovulación y ventana fértil</span>
+    <div class="logo">
+      <svg width="14" height="14" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="var(--rose-medium)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="var(--rose-soft)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="var(--rose-medium)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+  <div style="height:2mm;background:linear-gradient(90deg,var(--rose-dark),var(--rose-accent),var(--rose-soft));"></div>
+
+  <div class="page-content">
+    <div style="margin-bottom:4mm;">
+      <div class="chapter-label">Capítulo 04</div>
+      <h3 class="section-head" style="font-size:14px;margin-top:1mm;">Ovulación y ventana fértil</h3>
+    </div>
+
+    <p class="body-text">
+      El óvulo tiene una vida muy corta: <strong>12 a 24 horas</strong> tras la ovulación. Si no es fecundado en ese tiempo, se reabsorbe y hay que esperar al siguiente ciclo. Por eso el momento importa tanto.
+    </p>
+
+    <p class="body-text">
+      La buena noticia: los espermatozoides pueden sobrevivir en el tracto reproductor femenino hasta <strong>5 días</strong>. Eso significa que tu ventana fértil real es de unos 6 días: los 5 días anteriores a la ovulación más el día de la ovulación.
+    </p>
+
+    <div class="callout-dark">
+      <div class="callout-label">La ventana fértil real</div>
+      <p>No es el día de la ovulación, sino los <strong>2-3 días anteriores</strong> cuando las probabilidades son más altas. Tener relaciones la noche que ovulas puede ser demasiado tarde.</p>
+    </div>
+
+    <h4 class="section-sub">¿Cómo identificar tu ovulación?</h4>
+
+    <ul class="styled-list">
+      <li><strong>Moco cervical:</strong> se vuelve transparente, elástico y abundante —como clara de huevo— en los días fértiles.</li>
+      <li><strong>Temperatura basal:</strong> sube 0.2-0.5°C después de ovular. Confirma que ovulaste, no predice cuándo.</li>
+      <li><strong>Tests de ovulación (LH):</strong> detectan el pico hormonal 24-48h antes. Son los más útiles para actuar a tiempo.</li>
+      <li><strong>Dolor ovulatorio (Mittelschmerz):</strong> molestia leve en un costado al ovular. No siempre aparece.</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">Recuerda</div>
+      <p>Ningún método aislado es 100% fiable. La combinación de varios —especialmente moco + LH— da una imagen mucho más completa.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">7</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 5 — Error Nº2
+═══════════════════════════════════════════════════════ -->
+<div class="page chapter-opener">
+  <div class="chapter-stripe"></div>
+  <div class="chapter-header">
+    <div class="chapter-num-block">
+      <div class="chapter-num-label">Error</div>
+      <div class="chapter-num-value">02</div>
+    </div>
+    <div class="chapter-title-area">
+      <div class="chapter-label">Capítulo 05</div>
+      <h2 class="chapter-title">Tener relaciones en días poco fértiles</h2>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <p class="body-text">
+      Es uno de los errores más frecuentes y, paradójicamente, uno de los más fáciles de corregir. Muchas parejas que llevan meses intentándolo resulta que estaban "buscando" fuera de su ventana fértil real.
+    </p>
+
+    <p class="body-text">
+      Esto ocurre por varios motivos: calcular mal el día de ovulación, tener ciclos irregulares que no coinciden con la media, o simplemente no haberse parado a observar las señales del propio cuerpo.
+    </p>
+
+    <div class="big-quote">
+      No se trata de tener más relaciones. Se trata de tenerlas en el momento adecuado.
+    </div>
+
+    <h4 class="section-sub">El patrón que suele fallar</h4>
+    <ul class="styled-list">
+      <li>Creer que el ciclo es de 28 días exactos cuando no lo es.</li>
+      <li>Esperar al día 14 para "el día fértil" aunque la ovulación ocurra antes o después.</li>
+      <li>Tener relaciones de forma ocasional sin seguimiento del ciclo.</li>
+      <li>Solo tener relaciones cuando hay síntomas físicos (que a veces no son fiables).</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">La estrategia más eficaz</div>
+      <p>Relaciones cada 1-2 días durante los 5 días previos a la ovulación estimada. Esto maximiza las probabilidades sin necesidad de "programar" de forma estresante.</p>
+    </div>
+
+    <p class="body-text">
+      No hace falta convertirlo en una obsesión. Pero sí tener una idea clara de cuándo es tu ventana fértil para no perderla mes tras mes.
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">8</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 6 — Error Nº3
+═══════════════════════════════════════════════════════ -->
+<div class="page" style="background:white;">
+  <div class="page-header">
+    <span class="page-header-title">Por qué no te quedas embarazada</span>
+    <div class="logo">
+      <svg width="14" height="14" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="var(--rose-medium)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="var(--rose-soft)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="var(--rose-medium)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+  <div style="height:2mm;background:linear-gradient(90deg,var(--rose-dark),var(--rose-accent),var(--rose-soft));"></div>
+
+  <div class="page-content">
+    <div class="chapter-label" style="margin-bottom:1mm;">Error Nº3 · Capítulo 06</div>
+    <h3 class="section-head" style="font-size:14px;margin-top:0;margin-bottom:4mm;">Confiar en aplicaciones sin conocer tu cuerpo</h3>
+
+    <p class="body-text">
+      Las apps de seguimiento del ciclo son herramientas. Pueden ser útiles. Pero tienen un límite importante: <strong>calculan basándose en tus ciclos pasados</strong>, asumiendo que el siguiente será igual. Y la biología raramente es tan predecible.
+    </p>
+
+    <p class="body-text">
+      Si tu ciclo varía de mes en mes —algo completamente normal—, la app puede estar dándote fechas de ovulación que no corresponden con tu realidad fisiológica de ese mes concreto.
+    </p>
+
+    <div class="callout-rose">
+      <p><strong>El problema real:</strong> muchas mujeres confían ciegamente en las predicciones de la app y dejan de observar su propio cuerpo. La app dice "hoy no es día fértil" y descansan, cuando quizá ese mes ovularon antes.</p>
+    </div>
+
+    <h4 class="section-sub">Cómo usar las apps correctamente</h4>
+
+    <ul class="styled-list">
+      <li>Úsalas como punto de partida, no como verdad absoluta.</li>
+      <li>Combínalas con la observación del moco cervical.</li>
+      <li>Añade los resultados de los tests de LH para mayor precisión.</li>
+      <li>Si tu ciclo es irregular (+/- 5 días de variación), no te fíes solo del algoritmo.</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">En resumen</div>
+      <p>La mejor aplicación eres tú misma, bien informada. Las apps son asistentes, no oráculos.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">9</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 7 — Error Nº4
+═══════════════════════════════════════════════════════ -->
+<div class="page chapter-opener">
+  <div class="chapter-stripe"></div>
+  <div class="chapter-header">
+    <div class="chapter-num-block">
+      <div class="chapter-num-label">Error</div>
+      <div class="chapter-num-value">04</div>
+    </div>
+    <div class="chapter-title-area">
+      <div class="chapter-label">Capítulo 07</div>
+      <h2 class="chapter-title">Pensar que si ovulas ya es suficiente</h2>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <p class="body-text">
+      Ovular es necesario. Pero no suficiente. Para que un embarazo ocurra, se necesita una cadena de eventos que funcionen todos correctamente: que el óvulo madure bien, que sea fecundado, que el embrión se desarrolle, que el endometrio esté receptivo, y que la implantación se produzca.
+    </p>
+
+    <div class="callout-dark">
+      <div class="callout-label">La cadena de la concepción</div>
+      <p>Ovulación → Fecundación → Desarrollo embrionario → Receptividad endometrial → Implantación. Un fallo en cualquier eslabón interrumpe el proceso.</p>
+    </div>
+
+    <p class="body-text">
+      Hay mujeres que ovulan regularmente pero tienen una <strong>fase lútea corta</strong> (menos de 10 días), lo que no deja tiempo suficiente para que el embrión se implante antes de que baje la progesterona. Otras ovulan, pero la calidad ovocitaria está comprometida por factores como la edad, el estrés oxidativo o ciertos déficits nutricionales.
+    </p>
+
+    <h4 class="section-sub">Lo que también importa</h4>
+    <ul class="styled-list">
+      <li><strong>Calidad del óvulo:</strong> influenciada por edad, nutrición, estrés oxidativo.</li>
+      <li><strong>Fase lútea:</strong> debe durar al menos 10-12 días para permitir la implantación.</li>
+      <li><strong>Endometrio receptivo:</strong> grosor y calidad adecuados en el momento justo.</li>
+      <li><strong>Progesterona suficiente:</strong> clave para mantener el embarazo inicial.</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">A tener en cuenta</div>
+      <p>Si tienes reglas muy cortas (menos de 3 días) o manchado premenstrual varios días antes, podría indicar una fase lútea insuficiente. Vale la pena comentarlo con tu médico.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">10</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 8 — Factores invisibles
+═══════════════════════════════════════════════════════ -->
+<div class="page" style="background:white;">
+  <div class="page-header">
+    <span class="page-header-title">Factores invisibles</span>
+    <div class="logo">
+      <svg width="14" height="14" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="var(--rose-medium)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="var(--rose-soft)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="var(--rose-medium)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+  <div style="height:2mm;background:linear-gradient(90deg,var(--rose-dark),var(--rose-accent),var(--rose-soft));"></div>
+
+  <div class="page-content">
+    <div class="chapter-label" style="margin-bottom:1mm;">Capítulo 08</div>
+    <h3 class="section-head" style="font-size:14px;margin-top:0;margin-bottom:4mm;">Factores invisibles que nadie te explica</h3>
+
+    <p class="body-text">
+      Más allá de los errores en el timing, hay factores que afectan la fertilidad de forma silenciosa. No salen en la analítica de rutina, nadie te los menciona en la consulta de diez minutos, pero están ahí, influyendo.
+    </p>
+
+    <h4 class="section-sub">Inflamación crónica de bajo grado</h4>
+    <p class="body-text">
+      No duele ni molesta, pero altera el ambiente hormonal, interfiere con la implantación y puede deteriorar la calidad ovocitaria. Está relacionada con la alimentación ultraprocesada, la permeabilidad intestinal y el estrés sostenido.
+    </p>
+
+    <h4 class="section-sub">Estrés oxidativo</h4>
+    <p class="body-text">
+      El desequilibrio entre radicales libres y antioxidantes daña la calidad de los óvulos. Factores que lo aumentan: tabaco, alcohol, contaminación, mala alimentación, falta de sueño, estrés crónico.
+    </p>
+
+    <h4 class="section-sub">Salud intestinal</h4>
+    <p class="body-text">
+      El intestino regula la absorción de nutrientes clave para la fertilidad (folato, zinc, omega-3) y está directamente conectado con el equilibrio hormonal. Una microbiota alterada puede afectar la metabolización de estrógenos.
+    </p>
+
+    <h4 class="section-sub">Disruptores endocrinos</h4>
+    <p class="body-text">
+      Sustancias presentes en plásticos, cosméticos, pesticidas y packaging que imitan o bloquean la acción hormonal. Su efecto es acumulativo y muchas veces subestimado.
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">11</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 8 cont. — El ecosistema
+═══════════════════════════════════════════════════════ -->
+<div class="page" style="background:var(--cream);">
+  <div class="page-header">
+    <span class="page-header-title">Factores invisibles (cont.)</span>
+    <div class="logo">
+      <svg width="14" height="14" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="var(--rose-medium)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="var(--rose-soft)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="var(--rose-medium)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+  <div style="height:2mm;background:linear-gradient(90deg,var(--rose-dark),var(--rose-accent),var(--rose-soft));"></div>
+
+  <div class="page-content">
+    <div class="callout-dark" style="margin-bottom:5mm;">
+      <div class="callout-label">El problema de fondo</div>
+      <p>La medicina convencional tiende a mirar cada factor por separado. Pero la fertilidad funciona como un ecosistema: si algo falla en el conjunto, el resultado se resiente aunque cada pieza, analizada sola, "esté bien".</p>
+    </div>
+
+    <h3 class="section-head">Lo importante: sí hay margen de acción</h3>
+
+    <p class="body-text">
+      La buena noticia de todo esto es que muchos de estos factores son modificables. No todos, claro. Pero sí hay cosas concretas que puedes hacer para mejorar el terreno en el que tiene que producirse el embarazo.
+    </p>
+
+    <p class="body-text">
+      No es magia ni medicina alternativa. Es fisiología aplicada. Y se puede trabajar con cambios de hábito, con suplementación específica si procede, y con el acompañamiento adecuado.
+    </p>
+
+    <div class="callout">
+      <div class="callout-label">Tu margen de acción incluye</div>
+      <p>Alimentación antiinflamatoria, reducción de disruptores, manejo del estrés, sueño de calidad, suplementos específicos (según cada caso), y conocer tu ciclo en profundidad.</p>
+    </div>
+
+    <div class="big-quote">
+      No puedes controlarlo todo. Pero sí puedes mejorar las condiciones.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">12</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 9 — El estrés
+═══════════════════════════════════════════════════════ -->
+<div class="page chapter-opener">
+  <div class="chapter-stripe"></div>
+  <div class="chapter-header">
+    <div class="chapter-num-block">
+      <div class="chapter-num-label">Cap.</div>
+      <div class="chapter-num-value">09</div>
+    </div>
+    <div class="chapter-title-area">
+      <div class="chapter-label">Capítulo 09</div>
+      <h2 class="chapter-title">El impacto del estrés (y lo que sí puedes hacer)</h2>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <p class="body-text">
+      "Relájate y ya te quedas embarazada." Probablemente ya te lo han dicho. Y aunque el mensaje suena simplista —y a veces hiriente—, hay una verdad fisiológica detrás que vale la pena entender.
+    </p>
+
+    <p class="body-text">
+      El estrés crónico eleva el cortisol, que compite directamente con la progesterona —hormona fundamental para la fertilidad y para mantener un embarazo inicial. Un cortisol elevado sostenido puede alterar la ovulación, acortar la fase lútea y dificultar la implantación.
+    </p>
+
+    <div class="callout-rose">
+      <p><strong>Importante:</strong> el estrés de la búsqueda de embarazo en sí mismo puede convertirse en un factor de interferencia. No por "debilidad", sino por pura bioquímica.</p>
+    </div>
+
+    <h4 class="section-sub">Lo que sí puedes hacer (sin que te digan que "te relajes")</h4>
+
+    <ul class="styled-list">
+      <li><strong>Regulación del sistema nervioso:</strong> respiración diafragmática, meditación breve, yoga restaurativo.</li>
+      <li><strong>Sueño reparador:</strong> 7-8 horas, oscuridad, mismo horario. El sueño regula todas las hormonas.</li>
+      <li><strong>Movimiento físico moderado:</strong> el ejercicio intenso en exceso también puede alterar el ciclo.</li>
+      <li><strong>Gestión emocional activa:</strong> psicología especializada en fertilidad, grupos de apoyo.</li>
+      <li><strong>Establecer límites:</strong> cuándo miras el calendario, cuánto hablas del tema, descanso mental.</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">Clave</div>
+      <p>No se trata de "no estresarse" —eso es imposible. Se trata de gestionar el sistema nervioso de forma activa para que no interfiera crónicamente con tu biología reproductiva.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">13</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 10 — Casos reales
+═══════════════════════════════════════════════════════ -->
+<div class="page" style="background:white;">
+  <div class="page-header">
+    <span class="page-header-title">Casos reales de consulta</span>
+    <div class="logo">
+      <svg width="14" height="14" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="var(--rose-medium)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="var(--rose-soft)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="var(--rose-medium)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+  <div style="height:2mm;background:linear-gradient(90deg,var(--rose-dark),var(--rose-accent),var(--rose-soft));"></div>
+
+  <div class="page-content">
+    <div class="chapter-label" style="margin-bottom:1mm;">Capítulo 10</div>
+    <h3 class="section-head" style="font-size:14px;margin-top:0;margin-bottom:2mm;">Casos reales de consulta</h3>
+    <p class="body-text" style="font-size:8.5px;font-style:italic;color:var(--light);margin-bottom:5mm;">*Casos reales con datos modificados para proteger la privacidad</p>
+
+    <div class="case-card">
+      <div class="case-card-head">Caso 1 — Ciclo irregular y ovulación tardía</div>
+      <p>Ana, 32 años. Llevaba 8 meses buscando. Ciclo de entre 30 y 38 días según el mes. Usaba una app que le decía que ovulaba el día 16-17. Al hacer seguimiento real, descubrimos que ovulaba entre el día 20 y 25. Estaba teniendo relaciones demasiado pronto. Tres meses después de ajustar el timing, embarazo.</p>
+    </div>
+
+    <div class="case-card">
+      <div class="case-card-head">Caso 2 — Fase lútea corta</div>
+      <p>Lucía, 35 años. Ciclos regulares de 27 días pero la regla le llegaba 7-8 días después de ovular. Fase lútea de menos de 10 días. El embrión no tenía tiempo de implantarse. Con suplementación de progesterona natural y algunos ajustes de hábitos, mejoró significativamente la fase lútea.</p>
+    </div>
+
+    <div class="case-card">
+      <div class="case-card-head">Caso 3 — Estrés como factor principal</div>
+      <p>Marta, 33 años. Analíticas perfectas, ciclo regular, timing correcto. Trabajo muy estresante, dormía poco, niveles de cortisol elevados. Trabajamos el sueño y la gestión del estrés. Al cuarto mes de incorporar los cambios, embarazo espontáneo.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">14</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 11 — Mitos
+═══════════════════════════════════════════════════════ -->
+<div class="page chapter-opener">
+  <div class="chapter-stripe"></div>
+  <div class="chapter-header">
+    <div class="chapter-num-block">
+      <div class="chapter-num-label">Cap.</div>
+      <div class="chapter-num-value">11</div>
+    </div>
+    <div class="chapter-title-area">
+      <div class="chapter-label">Capítulo 11</div>
+      <h2 class="chapter-title">Mitos que están saboteando tu embarazo</h2>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="myth-item">
+      <div class="myth-x">✕</div>
+      <div class="myth-body">
+        <strong>"Si tengo la regla, estoy ovulando"</strong>
+        <p>Falso. Se puede tener menstruación sin haber ovulado (ciclos anovulatorios). Son más frecuentes de lo que se cree, especialmente en situaciones de estrés o desequilibrio hormonal.</p>
+      </div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-x">✕</div>
+      <div class="myth-body">
+        <strong>"Si ovulo el día 14, es que todo va bien"</strong>
+        <p>La ovulación en el día 14 es solo la media estadística de un ciclo de 28 días. Cada mujer tiene su propio patrón, y este puede variar cada mes.</p>
+      </div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-x">✕</div>
+      <div class="myth-body">
+        <strong>"Con 35 años ya es tarde"</strong>
+        <p>A los 35 la fertilidad empieza a disminuir, pero no desaparece. Muchas mujeres se quedan embarazadas de forma natural entre los 35 y 40 años. La edad importa, pero no lo determina todo.</p>
+      </div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-x">✕</div>
+      <div class="myth-body">
+        <strong>"Cuantas más relaciones, mejor"</strong>
+        <p>La frecuencia no compensa el timing. Relaciones diarias sin estar en la ventana fértil no mejoran las posibilidades. Y el exceso puede generar estrés en la pareja que contrarresta el beneficio.</p>
+      </div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-x">✕</div>
+      <div class="myth-body">
+        <strong>"Si no me quedo embarazada es culpa mía"</strong>
+        <p>La fertilidad es un proceso biológico complejo, no un reflejo de tu valía ni de cuánto lo deseas. La culpa no tiene lugar aquí — la comprensión y la acción, sí.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">15</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 12 — Qué hacer desde hoy
+═══════════════════════════════════════════════════════ -->
+<div class="page" style="background:white;">
+  <div class="page-header">
+    <span class="page-header-title">Pasos que puedes tomar hoy</span>
+    <div class="logo">
+      <svg width="14" height="14" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="var(--rose-medium)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="var(--rose-soft)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="var(--rose-medium)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+  <div style="height:2mm;background:linear-gradient(90deg,var(--rose-dark),var(--rose-accent),var(--rose-soft));"></div>
+
+  <div class="page-content">
+    <div class="chapter-label" style="margin-bottom:1mm;">Capítulo 12</div>
+    <h3 class="section-head" style="font-size:14px;margin-top:0;margin-bottom:4mm;">Qué puedes empezar a hacer desde hoy</h3>
+
+    <p class="body-text">
+      No necesitas hacer todo a la vez. Empieza por lo que más resuena contigo y añade capas progresivamente. Lo importante es empezar.
+    </p>
+
+    <div class="action-item">
+      <div class="action-icon">1</div>
+      <div class="action-body">
+        <strong>Empieza a observar tu moco cervical</strong>
+        <p>Es gratuito, siempre disponible y es el indicador más fiable de tu fertilidad real. Anótalo durante al menos 3 ciclos.</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon">2</div>
+      <div class="action-body">
+        <strong>Usa tests de ovulación (LH)</strong>
+        <p>Empieza a testar desde el día 10 del ciclo si este es de unos 28 días. Ajusta según tu longitud habitual.</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon">3</div>
+      <div class="action-body">
+        <strong>Lleva un registro del ciclo real</strong>
+        <p>Apunta: primer día de regla, duración, día de ovulación (estimado y confirmado), síntomas. En 3 meses tendrás un patrón real, no estadístico.</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon">4</div>
+      <div class="action-body">
+        <strong>Revisa tu alimentación</strong>
+        <p>Prioriza alimentos antiinflamatorios: frutas, verduras, legumbres, pescado azul, aceite de oliva. Reduce ultraprocesados, alcohol y azúcares añadidos.</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon">5</div>
+      <div class="action-body">
+        <strong>Protege tu sueño</strong>
+        <p>7-8 horas, oscuridad total, sin pantallas la última hora. El sueño es el regulador hormonal más potente que existe.</p>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-icon">6</div>
+      <div class="action-body">
+        <strong>Busca acompañamiento si lo necesitas</strong>
+        <p>No tienes que hacer esto sola ni a ciegas. Una consulta de orientación puede darte claridad y un plan adaptado a tu caso.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">16</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 13 — Cuándo pedir ayuda
+═══════════════════════════════════════════════════════ -->
+<div class="page chapter-opener">
+  <div class="chapter-stripe"></div>
+  <div class="chapter-header">
+    <div class="chapter-num-block">
+      <div class="chapter-num-label">Cap.</div>
+      <div class="chapter-num-value">13</div>
+    </div>
+    <div class="chapter-title-area">
+      <div class="chapter-label">Capítulo 13</div>
+      <h2 class="chapter-title">Cuándo pedir ayuda profesional</h2>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <p class="body-text">
+      Hay un momento en que la información y los cambios de hábito no son suficientes, y lo más inteligente —y valiente— es pedir ayuda. Conocer ese momento te ahorra tiempo, energía y sufrimiento innecesario.
+    </p>
+
+    <div class="callout-rose">
+      <p><strong>La guía general:</strong> si llevas 12 meses intentándolo con menos de 35 años, o 6 meses si tienes 35 o más, es momento de consultar con un especialista en reproducción.</p>
+    </div>
+
+    <h4 class="section-sub">Señales para no esperar tanto</h4>
+
+    <div class="signal-item">Ciclos muy irregulares (variaciones de más de 7-10 días entre ciclos)</div>
+    <div class="signal-item">Ausencia de regla durante más de 3 meses sin embarazo</div>
+    <div class="signal-item">Dolor muy intenso durante la menstruación (posible endometriosis)</div>
+    <div class="signal-item">Sangrado intermenstrual frecuente o inexplicado</div>
+    <div class="signal-item">Más de 2 pérdidas gestacionales previas</div>
+    <div class="signal-item">Diagnóstico previo de SOP, endometriosis, miomas u otras patologías</div>
+    <div class="signal-item">Tratamientos oncológicos previos que puedan haber afectado la fertilidad</div>
+
+    <div class="callout">
+      <div class="callout-label">Importante</div>
+      <p>Pedir ayuda no es rendirse. Es actuar con inteligencia y aprovechar los recursos disponibles para ti. Cuanto antes se estudia un caso, más opciones hay.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">17</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 14 — Reproducción asistida
+═══════════════════════════════════════════════════════ -->
+<div class="page" style="background:white;">
+  <div class="page-header">
+    <span class="page-header-title">Si estás en reproducción asistida</span>
+    <div class="logo">
+      <svg width="14" height="14" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="var(--rose-medium)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="var(--rose-soft)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="var(--rose-medium)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+  <div style="height:2mm;background:linear-gradient(90deg,var(--rose-dark),var(--rose-accent),var(--rose-soft));"></div>
+
+  <div class="page-content">
+    <div class="chapter-label" style="margin-bottom:1mm;">Capítulo 14</div>
+    <h3 class="section-head" style="font-size:14px;margin-top:0;margin-bottom:4mm;">Si estás en reproducción asistida: el acompañamiento también importa</h3>
+
+    <p class="body-text">
+      Acceder a una clínica de reproducción asistida es un gran paso. Pero a veces la información que recibes allí es técnica, rápida, y puede resultar difícil de integrar. Las consultas son cortas, las decisiones son importantes, y el proceso emocional es intenso.
+    </p>
+
+    <div class="big-quote">
+      Conocer lo que te están haciendo —y por qué— transforma completamente la experiencia.
+    </div>
+
+    <p class="body-text">
+      El acompañamiento especializado durante un tratamiento de FIV, IA u ovodonación no compite con tu equipo médico: lo complementa. Te ayuda a entender cada fase del protocolo, a saber qué preguntar, a interpretar tus resultados, y a gestionar la montaña rusa emocional que supone.
+    </p>
+
+    <h4 class="section-sub">En qué puede ayudarte el acompañamiento</h4>
+
+    <ul class="styled-list">
+      <li>Entender el protocolo de estimulación y lo que implica cada medicación.</li>
+      <li>Conocer qué significa cada resultado de ecografía o analítica.</li>
+      <li>Saber qué esperar en cada fase del tratamiento.</li>
+      <li>Preparar preguntas para tus visitas médicas y aprovecharlas mejor.</li>
+      <li>Gestionar la espera —la famosa "two-week wait"— sin que la ansiedad te consuma.</li>
+      <li>Tomar decisiones informadas sobre opciones como ovodonación o conservación de óvulos.</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-label">Una realidad que conozco bien</div>
+      <p>He acompañado miles de procesos desde dentro de la clínica. Sé lo que preguntan las pacientes, lo que sienten y lo que a veces no se atreven a preguntar. Ese puente entre lo técnico y lo humano es lo que ofrezco.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="page-footer-brand">Fertilidad a Tu Lado</span>
+    <span class="page-num">18</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CAPÍTULO 15 — Cierre
+═══════════════════════════════════════════════════════ -->
+<div class="page closing-page">
+  <div class="closing-deco"></div>
+  <div class="closing-deco-2"></div>
+
+  <div class="closing-body">
+    <div class="closing-eyebrow">Capítulo 15 · Cierre</div>
+
+    <h2 class="closing-title">
+      No estás fallando.<br/>
+      <em>Y no tienes que hacerlo sola.</em>
+    </h2>
+
+    <p class="closing-text">
+      Si has llegado hasta aquí, es porque te importa. Porque estás buscando respuestas. Porque quieres entender qué está pasando y qué puedes hacer al respecto. Eso ya es mucho.
+    </p>
+
+    <p class="closing-text">
+      La búsqueda de embarazo puede ser un camino largo, incierto y emocionalmente agotador. Pero no tiene por qué vivirse a ciegas ni en soledad.
+    </p>
+
+    <p class="closing-text">
+      Lo que necesitas no siempre es más información dispersa en internet. A veces es alguien que te explique lo tuyo, con tiempo, con honestidad y sin tecnicismos innecesarios. Alguien que haya estado en las dos partes: en la clínica y en el deseo.
+    </p>
+
+    <div class="closing-cta-box">
+      <div class="closing-cta-label">¿Hablamos?</div>
+      <div class="closing-cta-url">fertilidadatulado.es</div>
+      <div class="closing-cta-sub">Primera consulta de orientación · Online · Sin compromiso</div>
+    </div>
+  </div>
+
+  <div class="closing-footer">
+    <div class="logo">
+      <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="rgba(242,200,208,0.9)" transform="rotate(-20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="5" ry="9" fill="rgba(201,120,138,0.75)" transform="rotate(20 20 12)"/>
+        <ellipse cx="20" cy="12" rx="4" ry="8" fill="rgba(255,255,255,0.85)" transform="rotate(0 20 12)"/>
+        <line x1="20" y1="18" x2="20" y2="34" stroke="rgba(242,200,208,0.9)" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <div class="logo-text">
+        Fertilidad a Tu Lado
+        <span>Lidia · Enfermera en Reproducción Asistida</span>
+      </div>
+    </div>
+    <p>© 2024 · Todos los derechos reservados</p>
+  </div>
+</div>
+
+
+</body>
+</html>

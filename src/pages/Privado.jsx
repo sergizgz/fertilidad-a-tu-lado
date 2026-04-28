@@ -290,7 +290,7 @@ function SubmissionsSection({ submissions, onUpdate, onDelete, token }) {
   const handleDelete = async () => {
     if (!deleteTarget) return
     setDeleting(true)
-    await fetch('/api/delete-submission', {
+    await fetch('/api/submissions', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ id: deleteTarget.id }),
@@ -332,7 +332,7 @@ function SubmissionsSection({ submissions, onUpdate, onDelete, token }) {
 
   const handleStatusChange = async (id, status) => {
     setSavingId(id)
-    const res = await fetch('/api/update-submission', {
+    const res = await fetch('/api/submissions', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ id, status }),
@@ -344,7 +344,7 @@ function SubmissionsSection({ submissions, onUpdate, onDelete, token }) {
 
   const handleNotesSave = async (id) => {
     setSavingId(id)
-    const res = await fetch('/api/update-submission', {
+    const res = await fetch('/api/submissions', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ id, notes: notesDraft[id] ?? '' }),
@@ -1128,7 +1128,7 @@ function SubscribersSection({ token }) {
   const handleDelete = async () => {
     if (!deleteTarget) return
     setDeleting(true)
-    await fetch('/api/delete-subscriber', {
+    await fetch('/api/subscribers', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ id: deleteTarget.id }),
@@ -1740,7 +1740,7 @@ function IgFormSection({ token }) {
   const [deleting, setDeleting]       = useState(false)
 
   useEffect(() => {
-    fetch('/api/ig-submissions', { headers: { Authorization: `Bearer ${token}` } })
+    fetch('/api/ig', { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json())
       .then(({ submissions }) => { if (submissions) setSubmissions(submissions) })
       .finally(() => setLoading(false))
@@ -1749,7 +1749,7 @@ function IgFormSection({ token }) {
   const handleStatusChange = async (id, status) => {
     setSavingId(id)
     setSubmissions(prev => prev.map(s => s.id === id ? { ...s, status } : s))
-    await fetch('/api/update-ig-submission', {
+    await fetch('/api/ig', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ id, status }),
@@ -1761,7 +1761,7 @@ function IgFormSection({ token }) {
     setSavingId(id)
     const notes = notesDraft[id] ?? ''
     setSubmissions(prev => prev.map(s => s.id === id ? { ...s, notes } : s))
-    await fetch('/api/update-ig-submission', {
+    await fetch('/api/ig', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ id, notes }),
@@ -1772,7 +1772,7 @@ function IgFormSection({ token }) {
   const handleDelete = async () => {
     if (!deleteTarget) return
     setDeleting(true)
-    await fetch('/api/delete-ig-submission', {
+    await fetch('/api/ig', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ id: deleteTarget.id }),
