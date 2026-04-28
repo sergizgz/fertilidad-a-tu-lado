@@ -8,13 +8,15 @@ import AvisoLegal from './pages/AvisoLegal'
 import Privacidad from './pages/Privacidad'
 import Cookies from './pages/Cookies'
 import Privado from './pages/Privado'
+import Formulario from './pages/Formulario'
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Ruta privada — sin Header ni Footer públicos */}
+        {/* Rutas sin Header ni Footer */}
         <Route path="/privado" element={<Privado />} />
+        <Route path="/formulario" element={<Formulario />} />
 
         {/* Rutas públicas */}
         <Route path="/*" element={

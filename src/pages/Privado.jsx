@@ -8,7 +8,7 @@ import {
   Download, ExternalLink, Menu, X, StickyNote, CheckCircle2,
   Clock, PhoneCall, XCircle, BookOpen, ImageIcon, Upload, CheckCircle, AlertCircle, Loader2,
   Leaf, Heart, Stethoscope, Baby, Star, Shield, Sparkles, Moon, Sun,
-  Layers, Plus, Pencil, Trash2, GripVertical, Eye, EyeOff, ArrowUp, ArrowDown, LayoutGrid,
+  Layers, Plus, Pencil, Trash2, GripVertical, Eye, EyeOff, ArrowUp, ArrowDown, LayoutGrid, FileText,
 } from 'lucide-react'
 import PostList from '../components/blog/PostList'
 import PostEditor from '../components/blog/PostEditor'
@@ -1692,6 +1692,295 @@ function BiographySection() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Sección: Formulario IG
+// ─────────────────────────────────────────────────────────────────────────────
+const IG_STATUS_CONFIG = {
+  nuevo:      { label: 'Nuevo',      color: 'bg-amber-100 text-amber-700',  icon: Clock },
+  contactado: { label: 'Contactado', color: 'bg-blue-100 text-blue-700',    icon: PhoneCall },
+  descartado: { label: 'Descartado', color: 'bg-slate-100 text-slate-500',  icon: XCircle },
+}
+
+const PROCESO_SHORT = {
+  'Estoy empezando a informarme':                                          'Informándose',
+  'Estoy en proceso de búsqueda de embarazo natural':                     'Búsqueda natural',
+  'Estoy en tratamiento de reproducción asistida':                        'Tratamiento RA',
+  'Ya soy mamá/papá pero quiero trabajar mi relación con la fertilidad':  'Post-maternidad',
+}
+
+function exportIgXLSX(data) {
+  const rows = data.map(s => ({
+    'Fecha':    fmt(s.created_at),
+    'Nombre':   s.nombre,
+    'Email':    s.email,
+    'Teléfono': s.telefono,
+    'País':     s.pais,
+    'Proceso':  s.proceso ?? '',
+    'Objetivo': s.objetivo,
+    'Cómo supo': s.como_supo ?? '',
+    'Estado':   IG_STATUS_CONFIG[s.status]?.label ?? s.status,
+    'Notas':    s.notes ?? '',
+  }))
+  const ws = XLSX.utils.json_to_sheet(rows)
+  ws['!cols'] = [{ wch: 20 }, { wch: 22 }, { wch: 30 }, { wch: 16 }, { wch: 14 },
+                 { wch: 20 }, { wch: 40 }, { wch: 16 }, { wch: 14 }, { wch: 30 }]
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Form IG')
+  XLSX.writeFile(wb, `form_ig_${new Date().toISOString().slice(0, 10)}.xlsx`)
+}
+
+function IgFormSection({ token }) {
+  const [submissions, setSubmissions] = useState([])
+  const [loading, setLoading]         = useState(true)
+  const [search, setSearch]           = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+  const [expanded, setExpanded]       = useState(null)
+  const [notesDraft, setNotesDraft]   = useState({})
+  const [savingId, setSavingId]       = useState(null)
+  const [deleteTarget, setDeleteTarget] = useState(null)
+  const [deleting, setDeleting]       = useState(false)
+
+  useEffect(() => {
+    fetch('/api/ig-submissions', { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json())
+      .then(({ submissions }) => { if (submissions) setSubmissions(submissions) })
+      .finally(() => setLoading(false))
+  }, [token])
+
+  const handleStatusChange = async (id, status) => {
+    setSavingId(id)
+    setSubmissions(prev => prev.map(s => s.id === id ? { ...s, status } : s))
+    await fetch('/api/update-ig-submission', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id, status }),
+    })
+    setSavingId(null)
+  }
+
+  const handleNotesSave = async (id) => {
+    setSavingId(id)
+    const notes = notesDraft[id] ?? ''
+    setSubmissions(prev => prev.map(s => s.id === id ? { ...s, notes } : s))
+    await fetch('/api/update-ig-submission', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id, notes }),
+    })
+    setSavingId(null)
+  }
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return
+    setDeleting(true)
+    await fetch('/api/delete-ig-submission', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id: deleteTarget.id }),
+    })
+    setSubmissions(prev => prev.filter(s => s.id !== deleteTarget.id))
+    setDeleting(false)
+    setDeleteTarget(null)
+  }
+
+  const filtered = submissions.filter(s => {
+    const q = search.toLowerCase()
+    const matchSearch = !q || s.nombre.toLowerCase().includes(q) || s.email.toLowerCase().includes(q) || s.pais?.toLowerCase().includes(q)
+    const matchStatus = !statusFilter || s.status === statusFilter
+    return matchSearch && matchStatus
+  })
+
+  if (loading) return (
+    <div className="flex items-center justify-center h-40 text-[#9B9B9B] text-sm">
+      <Loader2 size={18} className="animate-spin mr-2" /> Cargando...
+    </div>
+  )
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 className="font-serif text-xl text-[#2A2A2A]">
+            Formulario Instagram
+            <span className="ml-2 text-sm font-sans font-normal text-[#9B9B9B]">({filtered.length})</span>
+          </h2>
+          <p className="text-sm text-[#9B9B9B] mt-0.5">Solicitudes de acompañamiento recibidas desde Instagram</p>
+        </div>
+        <button
+          onClick={() => exportIgXLSX(filtered)}
+          className="inline-flex items-center gap-2 text-sm text-rose-accent hover:text-rose-dark border border-rose-soft rounded-full px-4 py-2 transition-colors shrink-0"
+        >
+          <Download size={14} /> Exportar Excel
+        </button>
+      </div>
+
+      {/* Filtros */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9B9B9B]" />
+          <input type="text" placeholder="Buscar por nombre, email o país..."
+            value={search} onChange={e => setSearch(e.target.value)}
+            className="w-full border border-cream-darker rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:border-rose-accent bg-white transition-colors" />
+        </div>
+        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
+          className="border border-cream-darker rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-rose-accent bg-white text-[#4A4A4A]">
+          <option value="">Todos los estados</option>
+          {Object.entries(IG_STATUS_CONFIG).map(([val, { label }]) => (
+            <option key={val} value={val}>{label}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Tabla */}
+      {filtered.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-cream-darker/20 py-16 text-center">
+          <FileText size={32} className="mx-auto mb-3 text-[#C0C0C0]" />
+          <p className="text-sm text-[#9B9B9B]">
+            {search || statusFilter ? 'No hay resultados para ese filtro.' : 'Todavía no hay solicitudes.'}
+          </p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-2xl border border-cream-darker/20 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-cream-dark bg-cream/50">
+                  <th className="text-left px-4 py-3 font-medium text-[#6B6B6B] whitespace-nowrap">Fecha</th>
+                  <th className="text-left px-4 py-3 font-medium text-[#6B6B6B]">Nombre</th>
+                  <th className="text-left px-4 py-3 font-medium text-[#6B6B6B]">Email / Tel.</th>
+                  <th className="text-left px-4 py-3 font-medium text-[#6B6B6B]">País</th>
+                  <th className="text-left px-4 py-3 font-medium text-[#6B6B6B] whitespace-nowrap">Proceso</th>
+                  <th className="text-left px-4 py-3 font-medium text-[#6B6B6B]">Estado</th>
+                  <th className="text-left px-4 py-3 font-medium text-[#6B6B6B]">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map(s => {
+                  const statusCfg  = IG_STATUS_CONFIG[s.status] ?? IG_STATUS_CONFIG.nuevo
+                  const isExpanded = expanded === s.id
+                  const notesVal   = notesDraft[s.id] !== undefined ? notesDraft[s.id] : (s.notes ?? '')
+
+                  return (
+                    <>
+                      <tr key={s.id}
+                        className="border-b border-cream-dark/50 hover:bg-cream/30 transition-colors cursor-pointer"
+                        onClick={() => setExpanded(isExpanded ? null : s.id)}>
+                        <td className="px-4 py-3 text-[#9B9B9B] whitespace-nowrap">{fmtShort(s.created_at)}</td>
+                        <td className="px-4 py-3 font-medium text-[#2A2A2A] whitespace-nowrap">{s.nombre}</td>
+                        <td className="px-4 py-3">
+                          <div className="text-[#4A4A4A]">{s.email}</div>
+                          <div className="text-xs text-[#9B9B9B]">{s.telefono}</div>
+                        </td>
+                        <td className="px-4 py-3 text-[#4A4A4A]">{s.pais}</td>
+                        <td className="px-4 py-3">
+                          {s.proceso
+                            ? <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700 whitespace-nowrap">
+                                {PROCESO_SHORT[s.proceso] ?? s.proceso}
+                              </span>
+                            : <span className="text-[#C0C0C0]">—</span>}
+                        </td>
+                        <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
+                          <select
+                            value={s.status ?? 'nuevo'}
+                            disabled={savingId === s.id}
+                            onChange={e => handleStatusChange(s.id, e.target.value)}
+                            className={`text-xs font-medium px-2.5 py-1 rounded-full border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-accent/30 disabled:opacity-50 ${statusCfg.color}`}>
+                            {Object.entries(IG_STATUS_CONFIG).map(([val, { label }]) => (
+                              <option key={val} value={val}>{label}</option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <a href={`mailto:${s.email}?subject=Re: Tu solicitud de acompañamiento`}
+                              onClick={e => e.stopPropagation()}
+                              className="inline-flex items-center gap-1 text-xs text-rose-accent hover:text-rose-dark font-medium whitespace-nowrap">
+                              <ExternalLink size={12} /> Responder
+                            </a>
+                            <button
+                              onClick={e => { e.stopPropagation(); setDeleteTarget({ id: s.id, nombre: s.nombre }) }}
+                              className="p-1 rounded-lg text-[#C0C0C0] hover:text-red-400 hover:bg-red-50 transition-colors"
+                              title="Eliminar">
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      {/* Fila expandida */}
+                      {isExpanded && (
+                        <tr key={`${s.id}-exp`} className="bg-cream/20">
+                          <td colSpan={7} className="px-5 py-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {/* Detalle */}
+                              <div className="space-y-3">
+                                {s.proceso && (
+                                  <div>
+                                    <p className="text-xs font-medium text-[#6B6B6B] mb-1">Punto del proceso</p>
+                                    <p className="text-sm text-[#4A4A4A] bg-white rounded-xl px-4 py-3 border border-cream-darker/30">{s.proceso}</p>
+                                  </div>
+                                )}
+                                <div>
+                                  <p className="text-xs font-medium text-[#6B6B6B] mb-1 flex items-center gap-1.5">
+                                    <MessageSquare size={12} className="text-rose-accent" /> Objetivo
+                                  </p>
+                                  <p className="text-sm text-[#4A4A4A] bg-white rounded-xl px-4 py-3 border border-cream-darker/30 leading-relaxed">{s.objetivo}</p>
+                                </div>
+                                {s.como_supo && (
+                                  <div>
+                                    <p className="text-xs font-medium text-[#6B6B6B] mb-1">Cómo supo</p>
+                                    <p className="text-sm text-[#4A4A4A]">{s.como_supo}</p>
+                                  </div>
+                                )}
+                                <p className="text-xs text-[#9B9B9B]">{fmt(s.created_at)}</p>
+                              </div>
+
+                              {/* Notas */}
+                              <div>
+                                <p className="text-xs font-medium text-[#6B6B6B] mb-2 flex items-center gap-1.5">
+                                  <StickyNote size={12} className="text-amber-500" /> Notas internas
+                                </p>
+                                <textarea
+                                  rows={5}
+                                  placeholder="Añade tus notas sobre esta persona..."
+                                  value={notesVal}
+                                  onChange={e => setNotesDraft(d => ({ ...d, [s.id]: e.target.value }))}
+                                  className="w-full border border-cream-darker rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-rose-accent bg-white resize-none transition-colors"
+                                />
+                                <div className="flex justify-end mt-2">
+                                  <button
+                                    disabled={savingId === s.id}
+                                    onClick={() => handleNotesSave(s.id)}
+                                    className="inline-flex items-center gap-1.5 bg-rose-accent hover:bg-rose-dark text-white text-xs font-medium px-4 py-1.5 rounded-full transition-colors disabled:opacity-50">
+                                    {savingId === s.id ? 'Guardando...' : 'Guardar nota'}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {deleteTarget && (
+        <ConfirmDeleteModal
+          message={`Se eliminará la solicitud de "${deleteTarget.nombre}" de forma permanente. Esta acción no se puede deshacer.`}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+          loading={deleting}
+        />
+      )}
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Sección: Estructura (visibilidad de secciones de la web)
 // ─────────────────────────────────────────────────────────────────────────────
 const SITE_SECTIONS = [
@@ -1831,6 +2120,7 @@ const NAV_GROUPS = [
       { id: 'stats',       label: 'Resumen',      icon: LayoutDashboard },
       { id: 'submissions', label: 'Solicitudes',  icon: Mail },
       { id: 'subscribers', label: 'Suscriptores', icon: Users },
+      { id: 'ig-form',     label: 'Form IG',      icon: FileText },
     ],
   },
   {
@@ -2028,6 +2318,7 @@ function Dashboard({ session, onLogout }) {
               {activeSection === 'blog' && (
                 <BlogSection token={session.access_token} />
               )}
+              {activeSection === 'ig-form' && <IgFormSection token={session.access_token} />}
               {activeSection === 'services' && <ServicesSection />}
               {activeSection === 'portada' && <PortadaSection />}
               {activeSection === 'biography' && <BiographySection />}
